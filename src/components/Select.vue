@@ -282,7 +282,7 @@
   <div :dir="dir" class="dropdown v-select" :class="dropdownClasses">
     <div ref="toggle" @mousedown.prevent="toggleDropdown" :class="['dropdown-toggle', 'clearfix', {'disabled': disabled}]">
 
-      <span class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
+      <span @mousedown.prevent="toggleDropdown" class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
         <slot name="selected-option" v-bind="option">
           {{ getOptionLabel(option) }}
         </slot>
@@ -705,7 +705,7 @@
        * @return {void}
        */
       toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
+        if (this.shouldToggle(e)) {
           if (this.open) {
             this.$refs.search.blur() // dropdown will close on blur
           } else {
@@ -715,6 +715,17 @@
             }
           }
         }
+        e.stopPropagation();
+      },
+
+      /**
+       * Determine if an event target should toggle the dropdown.
+       * @param  {Event} e
+       * @return {Boolean}
+       */
+      shouldToggle(e) {
+        let els = [this.$refs.openIndicator, this.$refs.search, this.$refs.toggle, this.$el]
+        return els.includes(e.target) || e.target.classList.contains('selected-tag')
       },
 
       /**

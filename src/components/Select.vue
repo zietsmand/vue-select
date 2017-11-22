@@ -767,7 +767,6 @@
        */
       onSearchBlur() {
         if (this.mousedown) {
-          this.$refs.search.focus()
           this.mousedown = false
         } else {
           if (this.clearSearchOnBlur) {

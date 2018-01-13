@@ -282,8 +282,7 @@
   <div :dir="dir" class="dropdown v-select" :class="dropdownClasses">
     <div ref="toggle" @mousedown.prevent="toggleDropdown" :class="['dropdown-toggle', 'clearfix', {'disabled': disabled}]">
 
-      <slot v-for="option in valueAsArray" name="selected-option-container"
-            :option="option" :deselect="deselect">
+      <slot v-for="option in valueAsArray" name="selected-option-container" :option="option" :deselect="deselect" :multiple="multiple">
         <span class="selected-tag" v-bind:key="option.index">
           <slot name="selected-option" v-bind="option">
             {{ getOptionLabel(option) }}
@@ -292,7 +291,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </span>
-    </slot>
+      </slot>
 
       <input
               ref="search"

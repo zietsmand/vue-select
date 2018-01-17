@@ -837,6 +837,130 @@ describe('Select.vue', () => {
 		})
 	})
 
+	describe('When index prop is defined', () => {
+		it('can accept an array of objects and pre-selected value (single)', () => {
+			const vm = new Vue({
+				template: '<div><v-select :index="index" :options="options" :value="value"></v-select></div>',
+				components: {vSelect},
+				data: {
+					index: 'value',
+					value: 'foo',
+					options: [{label: 'This is Foo', value: 'foo'}, {label: 'This is Bar', value: 'bar'}]
+				}
+			}).$mount()
+			expect(vm.$children[0].mutableValue).toEqual(vm.value)
+		})
+
+		it('can accept an array of objects and pre-selected values (multiple)', () => {
+			const vm = new Vue({
+				template: '<div><v-select :index="index" :options="options" :value="value" :multiple="true"></v-select></div>',
+				components: {vSelect},
+				data: {
+					index: 'value',
+					value: ['foo', 'bar'],
+					options: [{label: 'This is Foo', value: 'foo'}, {label: 'This is Bar', value: 'bar'}]
+				}
+			}).$mount()
+			expect(vm.$children[0].mutableValue).toEqual(vm.value)
+		})
+
+		it('can deselect a pre-selected object', () => {
+			const vm = new Vue({
+				template: '<div><v-select :index="index" :options="options" :value="value" :multiple="true"></v-select></div>',
+				data: {
+					index: 'value',
+					value: ['foo', 'bar'],
+					options: [{label: 'This is Foo', value: 'foo'}, {label: 'This is Bar', value: 'bar'}]
+				}
+			}).$mount()
+			vm.$children[0].select('foo')
+			expect(vm.$children[0].mutableValue.length).toEqual(1)
+		})
+
+		it('can deselect an option when multiple is false', () => {
+			const vm = new Vue({
+				template: `<div><v-select :index="index" :options="options" :value="value"></v-select></div>`,
+				data: {
+					index: 'value',
+					value: 'foo',
+					options: [{label: 'This is Foo', value: 'foo'}, {label: 'This is Bar', value: 'bar'}]
+				}
+			}).$mount()
+			vm.$children[0].select('foo')
+			expect(vm.$children[0].mutableValue).toEqual(null)
+		})
+
+		it('can use v-model syntax for a two way binding to a parent component', (done) => {
+			const vm = new Vue({
+				template: '<div><v-select :index="index" :options="options" v-model="value"></v-select></div>',
+				components: {vSelect},
+				data: {
+					index: 'value',
+					value: 'foo',
+					options: [{label: 'This is Foo', value: 'foo'}, {label: 'This is Bar', value: 'bar'}, {label: 'This is Baz', value: 'baz'}]
+				}
+			}).$mount()
+
+			expect(vm.$children[0].value).toEqual('foo')
+			expect(vm.$children[0].mutableValue).toEqual('foo')
+
+			vm.$children[0].mutableValue = 'bar'
+
+			Vue.nextTick(() => {
+				expect(vm.value).toEqual('bar')
+				done()
+			})
+		}),
+
+		it('can generate labels using a custom label key', () => {
+			const vm = new Vue({
+				template: '<div><v-select :index="index" label="name" :options="options" v-model="value" :multiple="true"></v-select></div>',
+				components: {vSelect},
+				data: {
+					index: 'value',
+					value: ['baz'],
+					options: [{value: 'foo', name: 'Foo'}, {value: 'baz', name: 'Baz'}]
+				}
+			}).$mount()
+			expect(vm.$children[0].$refs.toggle.querySelector('.selected-tag').textContent).toContain('Baz')
+		})
+
+		it('will console.warn when options contain objects without a valid index key', (done) => {
+			spyOn(console, 'warn')
+			const vm = new Vue({
+				template: '<div><v-select :index="index" :options="options"></v-select></div>',
+				data: {
+					index: 'value',
+					options: [{label: 'Foo'}]
+				}
+			}).$mount()
+			vm.$children[0].open = true
+			Vue.nextTick(() => {
+				expect(console.warn).toHaveBeenCalledWith(
+                	`[vue-select warn]: Index key "option.value" does not exist in options object {"label":"Foo"}.`
+				)
+				done()
+			})
+		})
+
+		it('will not console.warn when options contain objects without an index key', (done) => {
+			spyOn(console, 'warn')
+			const vm = new Vue({
+				template: '<div><v-select :options="options"></v-select></div>',
+				data: {
+					options: [{label: 'Foo'}]
+				}
+			}).$mount()
+			vm.$children[0].open = true
+			Vue.nextTick(() => {
+				expect(console.warn).not.toHaveBeenCalledWith(
+                	`[vue-select warn]: Index key "option.value" does not exist in options object {"label":"Foo"}.`
+				)
+				done()
+			})
+		})
+	})
+
 	describe('When Tagging Is Enabled', () => {
 		it('can determine if a given option string already exists', () => {
 			const vm = new Vue({

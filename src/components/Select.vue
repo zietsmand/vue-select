@@ -527,6 +527,16 @@
                 'http://sagalbot.github.io/vue-select/#ex-labels'
               )
             }
+
+            if(this.index) {
+              if (!option.hasOwnProperty(this.index)) {
+                console.warn(
+                  `[vue-select warn]: Index key "option.${this.index}" does not` +
+                  ` exist in options object ${JSON.stringify(option)}.`
+                )
+              }
+            }
+
             if (this.label && option[this.label]) {
               return option[this.label]
             }
@@ -785,12 +795,6 @@
             option = this.createOption(option)
           }
           if(this.index) {
-            if (!option.hasOwnProperty(this.index)) {
-              console.warn(
-                `[vue-select warn]: Index key "option.${this.index}" does not` +
-                ` exist in options object ${JSON.stringify(option)}.`
-              )
-            }
             option  = option[this.index]
           }
           if (this.multiple && !this.mutableValue) {

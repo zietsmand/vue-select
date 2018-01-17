@@ -500,6 +500,16 @@
       },
 
       /**
+       * Tells vue-select what key to use when generating option
+       * values when each `option` is an object.
+       * @type {String}
+       */
+      index: {
+        type: String,
+        default: null
+      },
+
+      /**
        * Callback to generate the label text. If {option}
        * is an object, returns option[this.label] by default.
        * @type {Function}
@@ -520,6 +530,15 @@
             if (this.label && option[this.label]) {
               return option[this.label]
             }
+          }
+          if(this.index) {
+            let label = option
+            this.options.forEach((val) => {
+              if (val[this.index] == option) {
+                label = val[this.label]
+              }
+            })
+            return label
           }
           return option;
         }
@@ -765,7 +784,15 @@
           if (this.taggable && !this.optionExists(option)) {
             option = this.createOption(option)
           }
-
+          if(this.index) {
+            if (!option.hasOwnProperty(this.index)) {
+              console.warn(
+                `[vue-select warn]: Index key "option.${this.index}" does not` +
+                ` exist in options object ${JSON.stringify(option)}.\n`;
+              )
+            }
+            option  = option[this.index]
+          }
           if (this.multiple && !this.mutableValue) {
             this.mutableValue = [option]
           } else if (this.multiple) {
@@ -787,7 +814,7 @@
         if (this.multiple) {
           let ref = -1
           this.mutableValue.forEach((val) => {
-            if (val === option || typeof val === 'object' && val[this.label] === option[this.label]) {
+            if (val === option || (this.index && val === option[this.index]) || (typeof val === 'object' && val[this.label] === option[this.label])) {
               ref = val
             }
           })

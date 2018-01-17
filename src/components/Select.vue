@@ -788,7 +788,7 @@
             if (!option.hasOwnProperty(this.index)) {
               console.warn(
                 `[vue-select warn]: Index key "option.${this.index}" does not` +
-                ` exist in options object ${JSON.stringify(option)}.\n`;
+                ` exist in options object ${JSON.stringify(option)}.`
               )
             }
             option  = option[this.index]

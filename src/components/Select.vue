@@ -313,9 +313,9 @@
     <div ref="toggle" @mousedown.prevent="toggleDropdown" :class="['dropdown-toggle', 'clearfix']">
 
       <slot v-for="option in valueAsArray" name="selected-option-container"
-            :option="option" :deselect="deselect" :multiple="multiple" :disabled="disabled">
+            :option="(typeof option === 'object')?option:{[label]: option}" :deselect="deselect" :multiple="multiple" :disabled="disabled">
         <span class="selected-tag" v-bind:key="option.index">
-          <slot name="selected-option" v-bind="option">
+          <slot name="selected-option" v-bind="(typeof option === 'object')?option:{[label]: option}">
             {{ getOptionLabel(option) }}
           </slot>
           <button v-if="multiple" :disabled="disabled" @click="deselect(option)" type="button" class="close" aria-label="Remove option">
@@ -336,7 +336,7 @@
               @focus="onSearchFocus"
               type="search"
               class="form-control"
-              autocomplete="false"
+              autocomplete="off"
               :disabled="disabled"
               :placeholder="searchPlaceholder"
               :tabindex="tabindex"
@@ -368,7 +368,7 @@
       <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }">
         <li v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
           <a @mousedown.prevent="select(option)">
-          <slot name="option" v-bind="option">
+          <slot name="option" v-bind="(typeof option === 'object')?option:{[label]: option}">
             {{ getOptionLabel(option) }}
           </slot>
           </a>
@@ -788,9 +788,7 @@
        * @return {void}
        */
       select(option) {
-        if (this.isOptionSelected(option)) {
-          this.deselect(option)
-        } else {
+        if (!this.isOptionSelected(option)) {
           if (this.taggable && !this.optionExists(option)) {
             option = this.createOption(option)
           }
@@ -833,9 +831,9 @@
        * Clears the currently selected value(s)
        * @return {void}
        */
-       clearSelection() {
-         this.mutableValue = this.multiple ? [] : null
-       },
+      clearSelection() {
+        this.mutableValue = this.multiple ? [] : null
+      },
 
       /**
        * Called from this.select after each selection.

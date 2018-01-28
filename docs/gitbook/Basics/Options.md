@@ -54,6 +54,6 @@ If you wanted to return `CA` in the dropdown when `Canada` is selected, you'd us
 ```
 
 
-### Null / Empty Options {#emptyOptions}
+### Null / Empty Options {#null}
 
 `vue-select` requires the `option` property to be an `array`. If you are using Vue in development mode, you will get warnings attempting to pass anything other than an `array` to the `options` prop. If you need a `null`/`empty` value, use an empty array `[]`.

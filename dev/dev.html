@@ -7,7 +7,7 @@
     <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css" rel="stylesheet">-->
     <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css" rel="stylesheet">-->
     <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"> -->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">-->
     <style>
         
         #app {
@@ -45,6 +45,14 @@
             </template>
             <template slot="option" slot-scope="option">
                 {{option.label}} ({{option.value}})
+            </template>
+        </v-select>
+        <v-select placeholder="custom option template for string array" taggable :options="['cat', 'dog', 'bear']" multiple>
+            <template slot="selected-option" slot-scope="option">
+                {{option.label}}
+            </template>
+            <template slot="option" slot-scope="option">
+                {{option.label}}
             </template>
         </v-select>
         <v-select multiple placeholder="custom label template" :options="options">

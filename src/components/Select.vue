@@ -1080,9 +1080,9 @@
       isValueEmpty() {
         if (this.mutableValue) {
           if (typeof this.mutableValue === 'object') {
-            return !Object.keys(this.mutableValue).length
+            return ! Object.keys(this.mutableValue).length
           }
-          return !this.mutableValue.length
+          return ! this.valueAsArray.length
         }
 
         return true;

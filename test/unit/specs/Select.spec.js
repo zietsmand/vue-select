@@ -249,7 +249,20 @@ describe('Select.vue', () => {
 			expect(vm.$children[0].isOptionSelected('foo')).toEqual(true)
 		}),
 
-		describe('change Event', () => {
+		it('can work with an array of integers', () => {
+			const vm = new Vue({
+				template: '<div><v-select :options="[1,2,3,4,5]" v-model="value"></v-select></div>',
+				components: {vSelect},
+				data: {
+					value: 5,
+				}
+			}).$mount()
+
+			expect(vm.$children[0].isOptionSelected(5)).toEqual(true)
+			expect(vm.$children[0].isValueEmpty).toEqual(false)
+		})
+
+    describe('change Event', () => {
 			it('will trigger the input event when the selection changes', (done) => {
 				const vm = new Vue({
 					template: `<div><v-select ref="select"  :value="['foo']" :options="['foo','bar','baz']" v-on:input="foo = arguments[0]"></v-select></div>`,
@@ -1564,7 +1577,7 @@ describe('Select.vue', () => {
 		})
 	})
 
-	describe( 'Clear button', () => {
+	describe('Clear button', () => {
 
 		it( 'should be displayed on single select when value is selected', () => {
 			const VueSelect = Vue.extend( vSelect )

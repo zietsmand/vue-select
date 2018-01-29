@@ -346,13 +346,13 @@
               aria-label="Search for option"
       >
 
-      <button 
-        v-show="showClearButton" 
-        :disabled="disabled" 
+      <button
+        v-show="showClearButton"
+        :disabled="disabled"
         @click="clearSelection"
-        type="button" 
-        class="clear" 
-        title="Clear selection" 
+        type="button"
+        class="clear"
+        title="Clear selection"
       >
         <span aria-hidden="true">&times;</span>
       </button>
@@ -512,6 +512,12 @@
       /**
        * Callback to generate the label text. If {option}
        * is an object, returns option[this.label] by default.
+       *
+       * Label text is used for filtering comparison and
+       * displaying. If you only need to adjust the
+       * display, you should use the `option` and
+       * `selected-option` slots.
+       *
        * @type {Function}
        * @param  {Object || String} option
        * @return {String}
@@ -519,6 +525,10 @@
       getOptionLabel: {
         type: Function,
         default(option) {
+          if( this.index ) {
+            option = this.findOptionByIndexValue(option)
+          }
+
           if (typeof option === 'object') {
             if (!option.hasOwnProperty(this.label)) {
               return console.warn(
@@ -527,28 +537,7 @@
                 'http://sagalbot.github.io/vue-select/#ex-labels'
               )
             }
-
-            if(this.index) {
-              if (!option.hasOwnProperty(this.index)) {
-                console.warn(
-                  `[vue-select warn]: Index key "option.${this.index}" does not` +
-                  ` exist in options object ${JSON.stringify(option)}.`
-                )
-              }
-            }
-
-            if (this.label && option[this.label]) {
-              return option[this.label]
-            }
-          }
-          if(this.index) {
-            let label = option
-            this.options.forEach((val) => {
-              if (val[this.index] == option) {
-                label = val[this.label]
-              }
-            })
-            return label
+            return option[this.label]
           }
           return option;
         }
@@ -793,7 +782,13 @@
             option = this.createOption(option)
           }
           if(this.index) {
-            option  = option[this.index]
+            if (!option.hasOwnProperty(this.index)) {
+              return console.warn(
+                  `[vue-select warn]: Index key "option.${this.index}" does not` +
+                  ` exist in options object ${JSON.stringify(option)}.`
+              )
+            }
+            option = option[this.index]
           }
           if (this.multiple && !this.mutableValue) {
             this.mutableValue = [option]
@@ -875,22 +870,50 @@
        * @return {Boolean}        True when selected | False otherwise
        */
       isOptionSelected(option) {
-        if (this.multiple && this.mutableValue) {
           let selected = false
-          this.mutableValue.forEach(opt => {
-            if (typeof opt === 'object' && opt[this.label] === option[this.label]) {
-              selected = true
-            } else if (typeof opt === 'object' && opt[this.label] === option) {
-              selected = true
-            }
-            else if (opt === option) {
+          this.valueAsArray.forEach(value => {
+            if (typeof value === 'object') {
+              selected = this.optionObjectComparator(value, option)
+            } else if (value === option || value === option[this.index]) {
               selected = true
             }
           })
           return selected
-        }
+      },
 
-        return this.mutableValue === option
+      /**
+       * Determine if two option objects are matching.
+       *
+       * @param value {Object}
+       * @param option {Object}
+       * @returns {boolean}
+       */
+      optionObjectComparator(value, option) {
+        if (this.index && value === option[this.index]) {
+          return true
+        } else if ((value[this.label] === option[this.label]) || (value[this.label] === option)) {
+          return true
+        } else if (this.index && value[this.index] === option[this.index]) {
+          return true
+        }
+        return false;
+      },
+
+      /**
+       * Finds an option from this.options
+       * where option[this.index] matches
+       * the passed in value.
+       *
+       * @param value {Object}
+       * @returns {*}
+       */
+      findOptionByIndexValue(value) {
+        this.options.forEach(_option => {
+          if (JSON.stringify(_option[this.index]) === JSON.stringify(value)) {
+            value = _option
+          }
+        })
+        return value
       },
 
       /**
@@ -1070,7 +1093,7 @@
        * @return {Array}
        */
       valueAsArray() {
-        if (this.multiple) {
+        if (this.multiple && this.mutableValue) {
           return this.mutableValue
         } else if (this.mutableValue) {
           return [].concat(this.mutableValue)

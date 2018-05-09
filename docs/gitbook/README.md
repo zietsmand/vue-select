@@ -23,3 +23,4 @@
 #### Resources
 - **[CodePen Template](http://codepen.io/sagalbot/pen/NpwrQO)**
 - **[Trello Roadmap](https://trello.com/b/vWvITNzS/vue-select)**
+- **[GitHub](https://github.com/sagalbot/vue-select)**

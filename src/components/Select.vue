@@ -329,6 +329,7 @@
               v-model="search"
               @keydown.delete="maybeDeleteValue"
               @keyup.esc="onEscape"
+              @keydown.tab="onTab"
               @keydown.up.prevent="typeAheadUp"
               @keydown.down.prevent="typeAheadDown"
               @keydown.enter.prevent="typeAheadSelect"
@@ -346,13 +347,13 @@
               aria-label="Search for option"
       >
 
-      <button 
-        v-show="showClearButton" 
-        :disabled="disabled" 
+      <button
+        v-show="showClearButton"
+        :disabled="disabled"
         @click="clearSelection"
-        type="button" 
-        class="clear" 
-        title="Clear selection" 
+        type="button"
+        class="clear"
+        title="Clear selection"
       >
         <span aria-hidden="true">&times;</span>
       </button>
@@ -680,6 +681,14 @@
         type: String,
         default: 'auto'
       },
+      /**
+       * When true, hitting the 'tab' key will select the current select value
+       * @type {Boolean}
+       */
+      selectOnTab: {
+        type: Boolean,
+        default: false
+      }
     },
 
     data() {
@@ -915,6 +924,16 @@
       maybeDeleteValue() {
         if (!this.$refs.search.value.length && this.mutableValue) {
           return this.multiple ? this.mutableValue.pop() : this.mutableValue = null
+        }
+      },
+
+      /**
+       * Select the current value if selectOnTab is enabled
+       * @return {void}
+       */
+      onTab() {
+        if (this.selectOnTab) {
+          this.typeAheadSelect();
         }
       },
 

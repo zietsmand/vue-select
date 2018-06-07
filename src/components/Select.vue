@@ -1,7 +1,7 @@
 <style>
   .v-select {
     position: relative;
-    font-family: sans-serif;
+    font-family: inherit;
   }
 
   .v-select,

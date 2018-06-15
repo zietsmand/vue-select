@@ -215,7 +215,8 @@
     cursor: pointer;
   }
   .v-select input[type="search"].hidden {
-    display: none;
+    width: 0px;
+    padding: 0;
   }
   .v-select input[type="search"].shrunk {
     width: auto;
@@ -989,7 +990,7 @@
        */
       inputClasses() {
         return {
-          hidden: !this.multiple && !this.isValueEmpty,
+          hidden: !this.multiple && !this.isValueEmpty && !this.dropdownOpen,
           shrunk: this.multiple && !this.isValueEmpty,
           empty: this.isValueEmpty,
         }

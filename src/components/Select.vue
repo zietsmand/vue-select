@@ -14,15 +14,11 @@
      attribute does most of the work for us by rearranging the child elements visually.
    */
   .v-select[dir="rtl"] .v-select__actions {
-    padding: 0 3px 0 6px;
+    padding: 0 3px 0 4px;
   }
   .v-select[dir="rtl"] .dropdown-toggle .clear {
     margin-left: 6px;
     margin-right: 0;
-  }
-  .v-select[dir="rtl"] .selected-tag {
-    margin-right: 3px;
-    margin-left: 1px;
   }
   .v-select[dir="rtl"] .selected-tag .close {
     margin-left: 0;
@@ -93,11 +89,12 @@
     flex-basis: 100%;
     flex-grow: 1;
     flex-wrap: wrap;
+    padding: 0 2px 4px;
   }
   .v-select .v-select__actions {
     display: flex;
     align-items: center;
-    padding: 0 6px 0 3px;
+    padding: 0 4px 0 3px;
   }
 
   /* Clear Button */
@@ -151,15 +148,13 @@
   /* Selected Tags */
   .v-select .selected-tag {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     color: #333;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    height: 26px;
-    margin: 4px 1px 0px 3px;
-    padding: 1px 0.25em;
-    line-height: 24px;
+    margin: 4px 2px 0px 2px;
+    padding: 0 0.25em;
   }
   .v-select.single .selected-tag {
     background-color: transparent;
@@ -204,7 +199,7 @@
     -moz-appearance: none;
     line-height: 1.42857143;
     font-size:1em;
-    height: 34px;
+    height: auto;
     display: inline-block;
     border: none;
     outline: none;

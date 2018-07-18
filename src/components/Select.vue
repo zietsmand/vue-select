@@ -210,11 +210,20 @@
     outline: none;
     margin: 0;
     padding: 0 .5em;
-    width: 10em;
     max-width: 100%;
     background: none;
     position: relative;
     box-shadow: none;
+
+    /* `flex-grow` will stretch the input to take all remaining space, but We
+       need to ensure a small amount of space so there's room to type input. We'll
+       set the input to "hidden" (via width: 0) when the dropdown is closed, to
+       prevent adding a "blank" line (see: https://github.com/sagalbot/vue-select/pull/512).
+       In that case, the flex-grow will still stretch the input to take any
+       available space, on the same "line."
+    */
+    flex-grow: 1;
+    width: 4em;
   }
   .v-select.unsearchable input[type="search"] {
     opacity: 0;

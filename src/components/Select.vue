@@ -329,7 +329,7 @@
   <div :dir="dir" class="dropdown v-select" :class="dropdownClasses">
     <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle clearfix">
 
-      <div class="v-select__selected-options">
+      <div class="v-select__selected-options" ref="selectedOptions">
         <slot v-for="option in valueAsArray" name="selected-option-container"
               :option="(typeof option === 'object')?option:{[label]: option}" :deselect="deselect" :multiple="multiple" :disabled="disabled">
           <span class="selected-tag" v-bind:key="option.index">
@@ -856,7 +856,8 @@
        * @return {void}
        */
       toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
+        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle ||
+            e.target === this.$refs.selectedOptions || e.target === this.$el) {
           if (this.open) {
             this.$refs.search.blur() // dropdown will close on blur
           } else {

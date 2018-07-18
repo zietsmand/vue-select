@@ -30,13 +30,13 @@
 
   /* Open Indicator */
   .v-select .open-indicator {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     pointer-events: all;
     transition: all 150ms cubic-bezier(1.000, -0.115, 0.975, 0.855);
     transition-timing-function: cubic-bezier(1.000, -0.115, 0.975, 0.855);
     opacity: 1;
-    height: 16px;
     width: 12px; /* To account for extra width from rotating. */
   }
   .v-select .open-indicator:before {
@@ -59,9 +59,6 @@
   }
   .v-select.loading .open-indicator {
     opacity: 0;
-  }
-  .v-select.open .open-indicator {
-    bottom: 1px;
   }
 
   /* Dropdown Toggle */
@@ -93,7 +90,7 @@
   }
   .v-select .v-select__actions {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     padding: 0 4px 0 3px;
   }
 
@@ -268,6 +265,7 @@
   }
   /* Loading Spinner */
   .v-select .spinner {
+    align-self: center;
     opacity: 0;
     font-size: 5px;
     text-indent: -9999em;

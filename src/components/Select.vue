@@ -99,7 +99,7 @@
     font-size: 23px;
     font-weight: 700;
     line-height: 1;
-    color: rgba(60, 60, 60, .5);
+    color: rgba(60, 60, 60, 0.5);
     padding: 0;
     border: 0;
     background-color: transparent;
@@ -163,7 +163,7 @@
   }
   .v-select .selected-tag .close {
     margin-left: 2px;
-    font-size: 20px;
+    font-size: 1.25em;
     appearance: none;
     padding: 0;
     cursor: pointer;
@@ -195,7 +195,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     line-height: 1.42857143;
-    font-size:1em;
+    font-size: 1em;
     height: auto;
     display: inline-block;
     border: none;

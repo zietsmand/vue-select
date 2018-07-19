@@ -204,7 +204,6 @@
     padding: 0 .5em;
     max-width: 100%;
     background: none;
-    position: relative;
     box-shadow: none;
 
     /* `flex-grow` will stretch the input to take all remaining space, but We

@@ -224,17 +224,12 @@
     cursor: pointer;
   }
   .v-select input[type="search"].hidden {
-    width: 0px;
+    height: 0;
     padding: 0;
-  }
-  .v-select input[type="search"].shrunk {
-    width: auto;
-  }
-  .v-select input[type="search"].empty {
-    width: 100%;
+    width: 0;
   }
 
-    /* List Items */
+  /* List Items */
   .v-select li {
     line-height: 1.42857143; /* Normalize line height */
   }
@@ -1002,9 +997,7 @@
        */
       inputClasses() {
         return {
-          hidden: !this.multiple && !this.isValueEmpty && !this.dropdownOpen,
-          shrunk: this.multiple && !this.isValueEmpty,
-          empty: this.isValueEmpty,
+          hidden: !this.isValueEmpty && !this.dropdownOpen
         }
       },
 

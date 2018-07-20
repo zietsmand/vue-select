@@ -67,7 +67,7 @@
     -moz-appearance: none;
     appearance: none;
     display: flex;
-    padding: 0;
+    padding: 0 0 4px 0;
     background: none;
     border: 1px solid rgba(60, 60, 60, .26);
     border-radius: 4px;
@@ -86,7 +86,7 @@
     flex-basis: 100%;
     flex-grow: 1;
     flex-wrap: wrap;
-    padding: 0 2px 4px;
+    padding: 0 2px;
   }
   .v-select .v-select__actions {
     display: flex;
@@ -146,10 +146,11 @@
   .v-select .selected-tag {
     display: flex;
     align-items: center;
-    color: #333;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 4px;
+    color: #333;
+    line-height: 1.42857143; /* Normalize line height */
     margin: 4px 2px 0px 2px;
     padding: 0 0.25em;
   }
@@ -196,12 +197,11 @@
     -moz-appearance: none;
     line-height: 1.42857143;
     font-size: 1em;
-    height: auto;
     display: inline-block;
-    border: none;
+    border: 1px solid transparent;
     outline: none;
-    margin: 0;
-    padding: 0 .5em;
+    margin: 4px 0 0 0;
+    padding: 0 0.5em;
     max-width: 100%;
     background: none;
     box-shadow: none;
@@ -223,6 +223,7 @@
     cursor: pointer;
   }
   .v-select input[type="search"].hidden {
+    border: none;
     height: 0;
     padding: 0;
     width: 0;

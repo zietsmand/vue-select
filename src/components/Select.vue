@@ -356,6 +356,7 @@
               :readonly="!searchable"
               :id="inputId"
               role="combobox"
+              :aria-expanded="dropdownOpen"
               aria-label="Search for option"
       >
 

@@ -550,6 +550,18 @@
       },
 
       /**
+       * Select the current value if selectOnTab is enabled
+       */
+      onTab: {
+        type: Function,
+        default: function () {
+          if (this.selectOnTab) {
+            this.typeAheadSelect();
+          }
+        },
+      },
+
+      /**
        * Enable/disable creating options from searchInput.
        * @type {Boolean}
        */
@@ -924,16 +936,6 @@
       maybeDeleteValue() {
         if (!this.$refs.search.value.length && this.mutableValue) {
           return this.multiple ? this.mutableValue.pop() : this.mutableValue = null
-        }
-      },
-
-      /**
-       * Select the current value if selectOnTab is enabled
-       * @return {void}
-       */
-      onTab() {
-        if (this.selectOnTab) {
-          this.typeAheadSelect();
         }
       },
 

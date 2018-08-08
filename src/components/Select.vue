@@ -13,7 +13,7 @@
   /* Rtl support - Because we're using a flexbox-based layout, the `dir="rtl"` HTML
      attribute does most of the work for us by rearranging the child elements visually.
    */
-  .v-select[dir="rtl"] .v-select__actions {
+  .v-select[dir="rtl"] .vs__actions {
     padding: 0 3px 0 4px;
   }
   .v-select[dir="rtl"] .dropdown-toggle .clear {
@@ -73,25 +73,17 @@
     border-radius: 4px;
     white-space: normal;
   }
-  .v-select .dropdown-toggle:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
-  }
-  .v-select .v-select__selected-options {
+  .v-select .vs__selected-options {
     display: flex;
     flex-basis: 100%;
     flex-grow: 1;
     flex-wrap: wrap;
     padding: 0 2px;
   }
-  .v-select .v-select__actions {
+  .v-select .vs__actions {
     display: flex;
     align-items: stretch;
-    padding: 0 4px 0 3px;
+    padding: 0 6px 0 3px;
   }
 
   /* Clear Button */
@@ -324,9 +316,9 @@
 
 <template>
   <div :dir="dir" class="dropdown v-select" :class="dropdownClasses">
-    <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle clearfix">
+    <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle">
 
-      <div class="v-select__selected-options" ref="selectedOptions">
+      <div class="vs__selected-options" ref="selectedOptions">
         <slot v-for="option in valueAsArray" name="selected-option-container"
               :option="(typeof option === 'object')?option:{[label]: option}" :deselect="deselect" :multiple="multiple" :disabled="disabled">
           <span class="selected-tag" v-bind:key="option.index">
@@ -362,7 +354,7 @@
         >
 
       </div>
-      <div class="v-select__actions">
+      <div class="vs__actions">
         <button
           v-show="showClearButton"
           :disabled="disabled"

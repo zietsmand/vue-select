@@ -403,6 +403,26 @@ describe('Select.vue', () => {
 			})
 		})
 
+		it('should open the dropdown when the selected tag is clicked', (done) => {
+			const vm = new Vue({
+				template: '<div><v-select :options="options" :value="value"></v-select></div>',
+				components: {vSelect},
+				data: {
+					value: [{label: 'one'}],
+					options: [{label: 'one'}]
+				}
+			}).$mount()
+
+			const selectedTag = vm.$children[0].$el.getElementsByClassName('selected-tag')[0]
+			vm.$children[0].toggleDropdown({target: selectedTag})
+			Vue.nextTick(() => {
+				Vue.nextTick(() => {
+					expect(vm.$children[0].open).toEqual(true)
+					done()
+				})
+			})
+		})
+
 		it('can close the dropdown when the el is clicked', (done) => {
 			const vm = new Vue({
 				template: '<div><v-select></v-select></div>',

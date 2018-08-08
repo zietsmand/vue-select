@@ -109,6 +109,22 @@ describe('Select.vue', () => {
 			expect(vm.$children[0].mutableValue).toEqual(vm.value)
 		})
 
+    it('can select an option on tab', (done) => {
+      const vm = new Vue({
+        template: `<div><v-select :options="['one','two']" select-on-tab></v-select></div>`,
+        components: {vSelect},
+      }).$mount()
+
+      vm.$children[0].typeAheadPointer = 0
+
+      trigger(vm.$children[0].$refs.search, 'keydown', (e) => e.keyCode = 9)
+
+      Vue.nextTick(() => {
+        expect(vm.$children[0].mutableValue).toEqual('one');
+        done();
+      })
+    })
+
 		it('can deselect a pre-selected object', () => {
 			const vm = new Vue({
 				template: '<div><v-select :options="options" :value="value" :multiple="true"></v-select></div>',

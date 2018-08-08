@@ -3,42 +3,41 @@
     position: relative;
     font-family: inherit;
   }
-
   .v-select,
   .v-select * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
-  /* Rtl support */
-  .v-select.rtl .open-indicator {
-    left: 10px;
-    right: auto;
+
+  /* Rtl support - Because we're using a flexbox-based layout, the `dir="rtl"` HTML
+     attribute does most of the work for us by rearranging the child elements visually.
+   */
+  .v-select[dir="rtl"] .vs__actions {
+    padding: 0 3px 0 4px;
   }
-  .v-select.rtl .selected-tag {
-    float: right;
-    margin-right: 3px;
-    margin-left: 1px;
+  .v-select[dir="rtl"] .dropdown-toggle .clear {
+    margin-left: 6px;
+    margin-right: 0;
   }
-  .v-select.rtl .dropdown-menu {
+  .v-select[dir="rtl"] .selected-tag .close {
+    margin-left: 0;
+    margin-right: 2px;
+  }
+  .v-select[dir="rtl"] .dropdown-menu {
     text-align: right;
   }
-  .v-select.rtl .dropdown-toggle .clear {
-    left: 30px;
-    right: auto;
-  }
+
   /* Open Indicator */
   .v-select .open-indicator {
-    position: absolute;
-    bottom: 6px;
-    right: 10px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     pointer-events: all;
     transition: all 150ms cubic-bezier(1.000, -0.115, 0.975, 0.855);
     transition-timing-function: cubic-bezier(1.000, -0.115, 0.975, 0.855);
     opacity: 1;
-    height: 20px; width: 10px;
+    width: 12px; /* To account for extra width from rotating. */
   }
   .v-select .open-indicator:before {
     border-color: rgba(60, 60, 60, .5);
@@ -48,7 +47,7 @@
     display: inline-block;
     height: 10px;
     width: 10px;
-    vertical-align: top;
+    vertical-align: text-top;
     transform: rotate(133deg);
     transition: all 150ms cubic-bezier(1.000, -0.115, 0.975, 0.855);
     transition-timing-function: cubic-bezier(1.000, -0.115, 0.975, 0.855);
@@ -61,44 +60,43 @@
   .v-select.loading .open-indicator {
     opacity: 0;
   }
-  .v-select.open .open-indicator {
-    bottom: 1px;
-  }
+
   /* Dropdown Toggle */
   .v-select .dropdown-toggle {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    display: block;
-    padding: 0;
+    display: flex;
+    padding: 0 0 4px 0;
     background: none;
     border: 1px solid rgba(60, 60, 60, .26);
-    min-height: 36px;
     border-radius: 4px;
     white-space: normal;
   }
-  .v-select .dropdown-toggle:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
+  .v-select .vs__selected-options {
+    display: flex;
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    padding: 0 2px;
+  }
+  .v-select .vs__actions {
+    display: flex;
+    align-items: stretch;
+    padding: 0 6px 0 3px;
   }
 
   /* Clear Button */
   .v-select .dropdown-toggle .clear {
-    position: absolute;
-    bottom: 9px;
-    right: 30px;
     font-size: 23px;
     font-weight: 700;
     line-height: 1;
-    color: rgba(60, 60, 60, .5);
+    color: rgba(60, 60, 60, 0.5);
     padding: 0;
     border: 0;
     background-color: transparent;
     cursor: pointer;
+    margin-right: 6px;
   }
 
   /* Dropdown Toggle States */
@@ -138,32 +136,27 @@
   }
   /* Selected Tags */
   .v-select .selected-tag {
-    color: #333;
+    display: flex;
+    align-items: center;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    height: 26px;
-    margin: 4px 1px 0px 3px;
-    padding: 1px 0.25em;
-    float: left;
-    line-height: 24px;
+    color: #333;
+    line-height: 1.42857143; /* Normalize line height */
+    margin: 4px 2px 0px 2px;
+    padding: 0 0.25em;
   }
   .v-select.single .selected-tag {
     background-color: transparent;
     border-color: transparent;
   }
-  .v-select.single.open .selected-tag {
-    position: absolute;
-    opacity: .5;
-  }
-  .v-select.single.open.searching .selected-tag,
+  .v-select.single.open .selected-tag,
   .v-select.single.loading .selected-tag {
     display: none;
   }
   .v-select .selected-tag .close {
-    float: none;
-    margin-right: 0;
-    font-size: 20px;
+    margin-left: 2px;
+    font-size: 1.25em;
     appearance: none;
     padding: 0;
     cursor: pointer;
@@ -195,18 +188,25 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     line-height: 1.42857143;
-    font-size:1em;
-    height: 34px;
+    font-size: 1em;
     display: inline-block;
-    border: none;
+    border: 1px solid transparent;
     outline: none;
-    margin: 0;
-    padding: 0 .5em;
-    width: 10em;
+    margin: 4px 0 0 0;
+    padding: 0 0.5em;
     max-width: 100%;
     background: none;
-    position: relative;
     box-shadow: none;
+
+    /* `flex-grow` will stretch the input to take all remaining space, but We
+       need to ensure a small amount of space so there's room to type input. We'll
+       set the input to "hidden" (via width: 0) when the dropdown is closed, to
+       prevent adding a "blank" line (see: https://github.com/sagalbot/vue-select/pull/512).
+       In that case, the flex-grow will still stretch the input to take any
+       available space, on the same "line."
+    */
+    flex-grow: 1;
+    width: 4em;
   }
   .v-select.unsearchable input[type="search"] {
     opacity: 0;
@@ -215,17 +215,13 @@
     cursor: pointer;
   }
   .v-select input[type="search"].hidden {
-    width: 0px;
+    border: none;
+    height: 0;
     padding: 0;
-  }
-  .v-select input[type="search"].shrunk {
-    width: auto;
-  }
-  .v-select input[type="search"].empty {
-    width: 100%;
+    width: 0;
   }
 
-    /* List Items */
+  /* List Items */
   .v-select li {
     line-height: 1.42857143; /* Normalize line height */
   }
@@ -256,10 +252,8 @@
   }
   /* Loading Spinner */
   .v-select .spinner {
+    align-self: center;
     opacity: 0;
-    position: absolute;
-    top: 5px;
-    right: 10px;
     font-size: 5px;
     text-indent: -9999em;
     overflow: hidden;
@@ -322,60 +316,64 @@
 
 <template>
   <div :dir="dir" class="dropdown v-select" :class="dropdownClasses">
-    <div ref="toggle" @mousedown.prevent="toggleDropdown" :class="['dropdown-toggle', 'clearfix']">
+    <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle">
 
-      <slot v-for="option in valueAsArray" name="selected-option-container"
-            :option="(typeof option === 'object')?option:{[label]: option}" :deselect="deselect" :multiple="multiple" :disabled="disabled">
-        <span class="selected-tag" v-bind:key="option.index">
-          <slot name="selected-option" v-bind="(typeof option === 'object')?option:{[label]: option}">
-            {{ getOptionLabel(option) }}
-          </slot>
-          <button v-if="multiple" :disabled="disabled" @click="deselect(option)" type="button" class="close" aria-label="Remove option">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </span>
-    </slot>
+      <div class="vs__selected-options" ref="selectedOptions">
+        <slot v-for="option in valueAsArray" name="selected-option-container"
+              :option="(typeof option === 'object')?option:{[label]: option}" :deselect="deselect" :multiple="multiple" :disabled="disabled">
+          <span class="selected-tag" v-bind:key="option.index">
+            <slot name="selected-option" v-bind="(typeof option === 'object')?option:{[label]: option}">
+              {{ getOptionLabel(option) }}
+            </slot>
+            <button v-if="multiple" :disabled="disabled" @click="deselect(option)" type="button" class="close" aria-label="Remove option">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </span>
+        </slot>
 
-      <input
-              ref="search"
-              v-model="search"
-              @keydown.delete="maybeDeleteValue"
-              @keyup.esc="onEscape"
-              @keydown.up.prevent="typeAheadUp"
-              @keydown.down.prevent="typeAheadDown"
-              @keydown.enter.prevent="typeAheadSelect"
-              @blur="onSearchBlur"
-              @focus="onSearchFocus"
-              type="search"
-              class="form-control"
-              :class="inputClasses"
-              autocomplete="off"
-              :disabled="disabled"
-              :placeholder="searchPlaceholder"
-              :tabindex="tabindex"
-              :readonly="!searchable"
-              :id="inputId"
-              role="combobox"
-              :aria-expanded="dropdownOpen"
-              aria-label="Search for option"
-      >
+        <input
+                ref="search"
+                v-model="search"
+                @keydown.delete="maybeDeleteValue"
+                @keyup.esc="onEscape"
+                @keydown.up.prevent="typeAheadUp"
+                @keydown.down.prevent="typeAheadDown"
+                @keydown.enter.prevent="typeAheadSelect"
+                @blur="onSearchBlur"
+                @focus="onSearchFocus"
+                type="search"
+                class="form-control"
+                :class="inputClasses"
+                autocomplete="off"
+                :disabled="disabled"
+                :placeholder="searchPlaceholder"
+                :tabindex="tabindex"
+                :readonly="!searchable"
+                :id="inputId"
+                role="combobox"
+                :aria-expanded="dropdownOpen"
+                aria-label="Search for option"
+        >
 
-      <button
-        v-show="showClearButton"
-        :disabled="disabled"
-        @click="clearSelection"
-        type="button"
-        class="clear"
-        title="Clear selection"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
+      </div>
+      <div class="vs__actions">
+        <button
+          v-show="showClearButton"
+          :disabled="disabled"
+          @click="clearSelection"
+          type="button"
+          class="clear"
+          title="Clear selection"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
 
-      <i v-if="!noDrop" ref="openIndicator" role="presentation" class="open-indicator"></i>
+        <i v-if="!noDrop" ref="openIndicator" role="presentation" class="open-indicator"></i>
 
-      <slot name="spinner">
-        <div class="spinner" v-show="mutableLoading">Loading...</div>
-      </slot>
+        <slot name="spinner">
+          <div class="spinner" v-show="mutableLoading">Loading...</div>
+        </slot>
+      </div>
     </div>
 
     <transition :name="transition">
@@ -726,12 +724,12 @@
     watch: {
       /**
        * When the value prop changes, update
-			 * the internal mutableValue.
+       * the internal mutableValue.
        * @param  {mixed} val
        * @return {void}
        */
       value(val) {
-				this.mutableValue = val
+        this.mutableValue = val
       },
 
       /**
@@ -740,7 +738,7 @@
        * @param  {string|object} old
        * @return {void}
        */
-			mutableValue(val, old) {
+      mutableValue(val, old) {
         if (this.multiple) {
           this.onChange ? this.onChange(val) : null
         } else {
@@ -759,24 +757,24 @@
       },
 
       /**
-			 * Maybe reset the mutableValue
+       * Maybe reset the mutableValue
        * when mutableOptions change.
        * @return {[type]} [description]
        */
       mutableOptions() {
         if (!this.taggable && this.resetOnOptionsChange) {
-					this.mutableValue = this.multiple ? [] : null
+          this.mutableValue = this.multiple ? [] : null
         }
       },
 
       /**
-			 * Always reset the mutableValue when
+       * Always reset the mutableValue when
        * the multiple prop changes.
        * @param  {Boolean} val
        * @return {void}
        */
       multiple(val) {
-				this.mutableValue = val ? [] : null
+        this.mutableValue = val ? [] : null
       }
     },
 
@@ -785,9 +783,9 @@
      * attach any event listeners.
      */
     created() {
-			this.mutableValue = this.value
+      this.mutableValue = this.value
       this.mutableOptions = this.options.slice(0)
-			this.mutableLoading = this.loading
+      this.mutableLoading = this.loading
 
       this.$on('option:created', this.maybePushTag)
     },
@@ -875,7 +873,8 @@
        * @return {void}
        */
       toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
+        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle ||
+            e.target === this.$refs.selectedOptions || e.target === this.$el) {
           if (this.open) {
             this.$refs.search.blur() // dropdown will close on blur
           } else {
@@ -1035,7 +1034,7 @@
           searchable: this.searchable,
           unsearchable: !this.searchable,
           loading: this.mutableLoading,
-          rtl: this.dir === 'rtl',
+          rtl: this.dir === 'rtl', // This can be removed - styling is handled by `dir="rtl"` attribute
           disabled: this.disabled
         }
       },
@@ -1046,9 +1045,7 @@
        */
       inputClasses() {
         return {
-          hidden: !this.multiple && !this.isValueEmpty && !this.dropdownOpen,
-          shrunk: this.multiple && !this.isValueEmpty,
-          empty: this.isValueEmpty,
+          hidden: !this.isValueEmpty && !this.dropdownOpen
         }
       },
 

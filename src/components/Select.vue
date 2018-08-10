@@ -377,9 +377,9 @@
     </div>
 
     <transition :name="transition">
-      <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }" role="listbox">
+      <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }" role="listbox" @mousedown="onMousedown">
         <li role="option" v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
-          <a @mousedown.prevent="select(option)">
+          <a @mousedown.prevent.stop="select(option)">
           <slot name="option" v-bind="(typeof option === 'object')?option:{[label]: option}">
             {{ getOptionLabel(option) }}
           </slot>
@@ -977,11 +977,15 @@
        * @return {void}
        */
       onSearchBlur() {
-        if (this.clearSearchOnBlur) {
-          this.search = ''
+        if (this.mousedown && !this.searching) {
+          this.mousedown = false
+        } else {
+          if (this.clearSearchOnBlur) {
+            this.search = ''
+          }
+          this.open = false
+          this.$emit('search:blur')
         }
-        this.open = false
-        this.$emit('search:blur')
       },
 
       /**
@@ -1037,6 +1041,17 @@
         if (this.pushTags) {
           this.mutableOptions.push(option)
         }
+      },
+
+      /**
+       * Event-Handler to help workaround IE11 (probably fixes 10 as well)
+       * firing a `blur` event when clicking
+       * the dropdown's scrollbar, causing it
+       * to collapse abruptly.
+       * @return {void}
+       */
+      onMousedown() {
+        this.mousedown = true
       }
     },
 

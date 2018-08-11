@@ -1,4 +1,4 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import VueSelect from "@/components/Select.vue";
 
 describe("VS - Selecting Values", () => {
@@ -52,206 +52,166 @@ describe("VS - Selecting Values", () => {
   it("can select an option on tab", () => {
     const Select = shallowMount(VueSelect, {
       propsData: {
-        options: defaultProps.options,
         selectOnTab: true
       }
     });
 
-    Select.typeAheadPointer = 0;
+    const spy = jest.spyOn(Select.vm, "typeAheadSelect");
 
     Select.find({ ref: "search" }).trigger("keydown", {
       keyCode: 9
     });
 
-    expect(Select.mutableValue).toEqual("one");
+    expect(spy).toHaveBeenCalledWith();
   });
-  //
-  // it('can deselect a pre-selected object', () => {
-  //   const vm = new Vue({
-  //     template:
-  //       '<div><v-select :options="options" :value="value" :multiple="true"></v-select></div>',
-  //     data: {
-  //       value: [
-  //         {label: 'This is Foo', value: 'foo'},
-  //         {label: 'This is Bar', value: 'bar'},
-  //       ],
-  //       options: [
-  //         {label: 'This is Foo', value: 'foo'},
-  //         {label: 'This is Bar', value: 'bar'},
-  //       ],
-  //     },
-  //   }).$mount();
-  //   vm.$children[0].deselect({label: 'This is Foo', value: 'foo'});
-  //   expect(vm.$children[0].mutableValue.length).toEqual(1);
-  // });
-  //
-  // it('can deselect a pre-selected string', () => {
-  //   const vm = new Vue({
-  //     template:
-  //       '<div><v-select :options="options" :value="value" :multiple="true"></v-select></div>',
-  //     data: {
-  //       value: ['foo', 'bar'],
-  //       options: ['foo', 'bar'],
-  //     },
-  //   }).$mount();
-  //   vm.$children[0].deselect('foo');
-  //   expect(vm.$children[0].mutableValue.length).toEqual(1);
-  // }),
-  //   it('can deselect an option when multiple is false', () => {
-  //     const vm = new Vue({
-  //       template: `<div><v-select :value="'foo'"></v-select></div>`,
-  //     }).$mount();
-  //     vm.$children[0].deselect('foo');
-  //     expect(vm.$children[0].mutableValue).toEqual(null);
-  //   });
-  //
-  // it('can determine if the value prop is empty', () => {
-  //   const vm = new Vue({
-  //     template:
-  //       '<div><v-select :options="options" :value="value"></v-select></div>',
-  //     components: {vSelect},
-  //     data: {
-  //       value: [],
-  //       options: ['one', 'two', 'three'],
-  //     },
-  //   }).$mount();
-  //   var select = vm.$children[0];
-  //   expect(select.isValueEmpty).toEqual(true);
-  //
-  //   select.select(['one']);
-  //   expect(select.isValueEmpty).toEqual(false);
-  //
-  //   select.select([{l: 'f'}]);
-  //   expect(select.isValueEmpty).toEqual(false);
-  //
-  //   select.select('one');
-  //   expect(select.isValueEmpty).toEqual(false);
-  //
-  //   select.select({label: 'foo', value: 'foo'});
-  //   expect(select.isValueEmpty).toEqual(false);
-  //
-  //   select.select('');
-  //   expect(select.isValueEmpty).toEqual(true);
-  //
-  //   select.select(null);
-  //   expect(select.isValueEmpty).toEqual(true);
-  // });
-  //
-  // it('should reset the selected values when the multiple property changes',
-  //   done => {
-  //     const vm = new Vue({
-  //       template:
-  //         '<div><v-select :options="options" :value="value" :multiple="multiple"></v-select></div>',
-  //       components: {vSelect},
-  //       data: {
-  //         value: ['one'],
-  //         multiple: true,
-  //         options: ['one', 'two', 'three'],
-  //       },
-  //     }).$mount();
-  //
-  //     vm.multiple = false;
-  //
-  //     Vue.nextTick(() => {
-  //       expect(vm.$children[0].mutableValue).toEqual(null);
-  //       vm.multiple = true;
-  //       Vue.nextTick(() => {
-  //         expect(vm.$children[0].mutableValue).toEqual([]);
-  //         done();
-  //       });
-  //     });
-  //   });
-  //
-  // it('can retain values present in a new array of options', () => {
-  //   const vm = new Vue({
-  //     template:
-  //       '<div><v-select :options="options" v-model="value"></v-select></div>',
-  //     components: {vSelect},
-  //     data: {
-  //       value: ['one'],
-  //       options: ['one', 'two', 'three'],
-  //     },
-  //   }).$mount();
-  //   vm.options = ['one', 'five', 'six'];
-  //   expect(vm.$children[0].mutableValue).toEqual(['one']);
-  // });
-  //
-  // it('can determine if an object is already selected', () => {
-  //   const vm = new Vue({
-  //     template:
-  //       '<div><v-select :options="options" multiple v-model="value"></v-select></div>',
-  //     components: {vSelect},
-  //     data: {
-  //       value: [{label: 'one'}],
-  //       options: [{label: 'one'}],
-  //     },
-  //   }).$mount();
-  //
-  //   expect(vm.$children[0].isOptionSelected({label: 'one'})).toEqual(true);
-  // });
-  //
-  // it('can use v-model syntax for a two way binding to a parent component',
-  //   done => {
-  //     const vm = new Vue({
-  //       template:
-  //         '<div><v-select :options="options" v-model="value"></v-select></div>',
-  //       components: {vSelect},
-  //       data: {
-  //         value: 'foo',
-  //         options: ['foo', 'bar', 'baz'],
-  //       },
-  //     }).$mount();
-  //
-  //     expect(vm.$children[0].value).toEqual('foo');
-  //     expect(vm.$children[0].mutableValue).toEqual('foo');
-  //
-  //     vm.$children[0].mutableValue = 'bar';
-  //
-  //     Vue.nextTick(() => {
-  //       expect(vm.value).toEqual('bar');
-  //       done();
-  //     });
-  //   }),
-  //   it(
-  //     'can check if a string value is selected when the value is an object and multiple is true',
-  //     () => {
-  //       const vm = new Vue({
-  //         template: `<div><v-select multiple :value="[{label: 'foo', value: 'bar'}]"></v-select></div>`,
-  //       }).$mount();
-  //       expect(vm.$children[0].isOptionSelected('foo')).toEqual(true);
-  //     }),
-  //   describe('change Event', () => {
-  //     it('will trigger the input event when the selection changes', done => {
-  //       const vm = new Vue({
-  //         template: `<div><v-select ref="select"  :value="['foo']" :options="['foo','bar','baz']" v-on:input="foo = arguments[0]"></v-select></div>`,
-  //         data: {
-  //           foo: '',
-  //         },
-  //       }).$mount();
-  //
-  //       vm.$refs.select.select('bar');
-  //
-  //       Vue.nextTick(() => {
-  //         expect(vm.foo).toEqual('bar');
-  //         done();
-  //       });
-  //     });
-  //
-  //     it('should run change when multiple is true and the value changes',
-  //       done => {
-  //         const vm = new Vue({
-  //           template: `<div><v-select ref="select" :value="['foo']" :options="['foo','bar','baz']" multiple v-on:input="foo = arguments[0]"></v-select></div>`,
-  //           data: {
-  //             foo: '',
-  //           },
-  //         }).$mount();
-  //
-  //         vm.$refs.select.select('bar');
-  //
-  //         Vue.nextTick(() => {
-  //           expect(vm.foo).toEqual(['foo', 'bar']);
-  //           done();
-  //         });
-  //       });
-  //   });
+
+  it("can deselect a pre-selected object", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        multiple: true,
+        value: [
+          { label: "This is Foo", value: "foo" },
+          { label: "This is Bar", value: "bar" }
+        ],
+        options: [
+          { label: "This is Foo", value: "foo" },
+          { label: "This is Bar", value: "bar" }
+        ]
+      }
+    });
+
+    Select.vm.deselect({ label: "This is Foo", value: "foo" });
+    expect(Select.vm.mutableValue.length).toEqual(1);
+  });
+
+  it("can deselect a pre-selected string", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        multiple: true,
+        value: ["foo", "bar"],
+        options: ["foo", "bar"]
+      }
+    });
+    Select.vm.deselect("foo");
+    expect(Select.vm.mutableValue.length).toEqual(1);
+  });
+
+  it("can deselect an option when multiple is false", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        value: "foo"
+      }
+    });
+    Select.vm.deselect("foo");
+    expect(Select.vm.mutableValue).toEqual(null);
+  });
+
+  it("can determine if the value prop is empty", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        value: [],
+        options: ["one", "two", "three"]
+      }
+    });
+
+    const select = Select.vm;
+    expect(select.isValueEmpty).toEqual(true);
+
+    select.select(["one"]);
+    expect(select.isValueEmpty).toEqual(false);
+
+    select.select("one");
+    expect(select.isValueEmpty).toEqual(false);
+
+    select.select({ label: "foo", value: "foo" });
+    expect(select.isValueEmpty).toEqual(false);
+
+    select.select("");
+    expect(select.isValueEmpty).toEqual(true);
+
+    select.select(null);
+    expect(select.isValueEmpty).toEqual(true);
+  });
+
+  it("should reset the selected values when the multiple property changes", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        value: ["one"],
+        multiple: true,
+        options: ["one", "two", "three"]
+      }
+    });
+
+    expect(Select.vm.mutableValue).toEqual(["one"]);
+
+    Select.setProps({ multiple: false });
+    expect(Select.vm.mutableValue).toEqual(null);
+
+    Select.setProps({ multiple: true });
+    expect(Select.vm.mutableValue).toEqual([]);
+  });
+
+  it("can retain values present in a new array of options", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        value: ["one"],
+        options: ["one", "two", "three"]
+      }
+    });
+
+    Select.setProps({ options: ["one", "five", "six"] });
+    expect(Select.vm.mutableValue).toEqual(["one"]);
+  });
+
+  it("can determine if an object is already selected", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        value: [{ label: "one" }],
+        options: [{ label: "one" }]
+      }
+    });
+
+    expect(Select.vm.isOptionSelected({ label: "one" })).toEqual(true);
+  });
+
+  it("can use v-model syntax for a two way binding to a parent component", () => {
+    const Parent = mount({
+      data: () => ({ value: "foo", options: ["foo", "bar", "baz"] }),
+      template: `<div><v-select :options="options" v-model="value" /></div>`,
+      components: { "v-select": VueSelect }
+    });
+    const Select = Parent.find(VueSelect);
+
+    expect(Select.vm.value).toEqual("foo");
+    expect(Select.vm.mutableValue).toEqual("foo");
+
+    Select.vm.mutableValue = "bar";
+    expect(Parent.vm.value).toEqual("bar");
+  });
+
+  it("can check if a string value is selected when the value is an object and multiple is true", () => {
+    const Select = shallowMount(VueSelect, {
+      propsData: {
+        multiple: true,
+        value: [{ label: "foo", value: "bar" }]
+      }
+    });
+    expect(Select.vm.isOptionSelected("foo")).toEqual(true);
+  });
+
+  describe("change Event", () => {
+    it("will trigger the input event when the selection changes", () => {
+      const Select = shallowMount(VueSelect);
+      Select.vm.$data.mutableValue = "bar";
+      expect(Select.emitted("input")[0]).toEqual(["bar"]);
+    });
+
+    it("should run change when multiple is true and the value changes", () => {
+      const Select = shallowMount(VueSelect, {
+        propsData: { multiple: true, value: ["foo"], options: ["foo", "bar"] }
+      });
+      Select.vm.$data.mutableValue = ["bar"];
+      expect(Select.emitted("input")[0]).toEqual([["bar"]]);
+    });
+  });
 });

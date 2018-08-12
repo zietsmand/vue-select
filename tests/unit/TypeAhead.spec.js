@@ -2,182 +2,146 @@ import { shallowMount } from "@vue/test-utils";
 import VueSelect from "../../src/components/Select";
 
 describe("Moving the Typeahead Pointer", () => {
-  it("should set the pointer to zero when the filteredOptions change", () => {
-    const Select = shallowMount(VueSelect, {
+  const mountDefault = () =>
+    shallowMount(VueSelect, {
       propsData: { options: ["one", "two", "three"] }
     });
+
+  it("should set the pointer to zero when the filteredOptions change", () => {
+    const Select = mountDefault();
     Select.vm.search = "two";
     expect(Select.vm.typeAheadPointer).toEqual(0);
   });
 
-  //   it("should move the pointer visually up the list on up arrow keyDown", () => {
-  //     const vm = new Vue({
-  //       template: '<div><v-select :options="options"></v-select></div>',
-  //       components: { vSelect },
-  //       data: {
-  //         options: ["one", "two", "three"]
-  //       }
-  //     }).$mount();
-  //
-  //     vm.$children[0].typeAheadPointer = 1;
-  //
-  //     trigger(vm.$children[0].$refs.search, "keydown", e => (e.keyCode = 38));
-  //     expect(vm.$children[0].typeAheadPointer).toEqual(0);
-  //   });
-  //
-  //   it("should move the pointer visually down the list on down arrow keyDown", () => {
-  //     const vm = new Vue({
-  //       template: '<div><v-select :options="options"></v-select></div>',
-  //       components: { vSelect },
-  //       data: {
-  //         options: ["one", "two", "three"]
-  //       }
-  //     }).$mount();
-  //
-  //     vm.$children[0].typeAheadPointer = 1;
-  //     trigger(vm.$children[0].$refs.search, "keydown", e => (e.keyCode = 40));
-  //     expect(vm.$children[0].typeAheadPointer).toEqual(2);
-  //   });
-  //
-  //   it("should not move the pointer past the end of the list", () => {
-  //     const vm = new Vue({
-  //       template: '<div><v-select :options="options"></v-select></div>',
-  //       components: { vSelect },
-  //       data: {
-  //         options: ["one", "two", "three"]
-  //       }
-  //     }).$mount();
-  //
-  //     vm.$children[0].typeAheadPointer = 2;
-  //     vm.$children[0].typeAheadDown();
-  //     expect(vm.$children[0].typeAheadPointer).toEqual(2);
-  //   });
-  //
-  //   describe("Automatic Scrolling", () => {
-  //     it("should check if the scroll position needs to be adjusted on up arrow keyDown", () => {
-  //       const vm = new Vue({
-  //         template: '<div><v-select :options="options"></v-select></div>',
-  //         components: { vSelect },
-  //         data: {
-  //           options: ["one", "two", "three"]
-  //         }
-  //       }).$mount();
-  //
-  //       vm.$children[0].typeAheadPointer = 1;
-  //       spyOn(vm.$children[0], "maybeAdjustScroll");
-  //       trigger(vm.$children[0].$refs.search, "keydown", e => (e.keyCode = 38));
-  //       expect(vm.$children[0].maybeAdjustScroll).toHaveBeenCalled();
-  //     });
-  //
-  //     it("should check if the scroll position needs to be adjusted on down arrow keyDown", () => {
-  //       const vm = new Vue({
-  //         template: '<div><v-select :options="options"></v-select></div>',
-  //         components: { vSelect },
-  //         data: {
-  //           options: ["one", "two", "three"]
-  //         }
-  //       }).$mount();
-  //
-  //       spyOn(vm.$children[0], "maybeAdjustScroll");
-  //       trigger(vm.$children[0].$refs.search, "keydown", e => (e.keyCode = 40));
-  //       expect(vm.$children[0].maybeAdjustScroll).toHaveBeenCalled();
-  //     });
-  //
-  //     it("should check if the scroll position needs to be adjusted when filtered options changes", done => {
-  //       const vm = new Vue({
-  //         template: '<div><v-select :options="options"></v-select></div>',
-  //         components: { vSelect },
-  //         data: {
-  //           options: ["one", "two", "three"]
-  //         }
-  //       }).$mount();
-  //
-  //       spyOn(vm.$children[0], "maybeAdjustScroll");
-  //       vm.$children[0].search = "two";
-  //
-  //       Vue.nextTick(() => {
-  //         expect(vm.$children[0].maybeAdjustScroll).toHaveBeenCalled();
-  //         done();
-  //       });
-  //     });
-  //
-  //     it("should scroll up if the pointer is above the current viewport bounds", () => {
-  //       let methods = Object.assign(pointerScroll.methods, {
-  //         pixelsToPointerTop() {
-  //           return 1;
-  //         },
-  //         viewport() {
-  //           return { top: 2, bottom: 0 };
-  //         }
-  //       });
-  //       const vm = new Vue({
-  //         template:
-  //           "<div><v-select :options=\"['one', 'two', 'three']\"></v-select></div>",
-  //         components: {
-  //           "v-select": Mock({
-  //             "../mixins/pointerScroll": { methods }
-  //           })
-  //         }
-  //       }).$mount();
-  //
-  //       spyOn(vm.$children[0], "scrollTo");
-  //       vm.$children[0].maybeAdjustScroll();
-  //       expect(vm.$children[0].scrollTo).toHaveBeenCalledWith(1);
-  //     });
-  //
-  //     /**
-  //      * @link 	https://github.com/vuejs/vue-loader/issues/434
-  //      * @todo 	vue-loader/inject-loader fails when used twice in the same file,
-  //      *        so the mock here is abastracted to a separate file.
-  //      */
-  //     xit("should scroll down if the pointer is below the current viewport bounds", () => {
-  //       let methods = Object.assign(pointerScroll.methods, {
-  //         pixelsToPointerBottom() {
-  //           return 2;
-  //         },
-  //         viewport() {
-  //           return { top: 0, bottom: 1 };
-  //         }
-  //       });
-  //       const vm = new Vue({
-  //         template: `<div><v-select :options="['one', 'two', 'three']"></v-select></div>`,
-  //         components: {
-  //           "v-select": Mock({
-  //             "../mixins/pointerScroll": { methods }
-  //           })
-  //         }
-  //       }).$mount();
-  //
-  //       spyOn(vm.$children[0], "scrollTo");
-  //       vm.$children[0].maybeAdjustScroll();
-  //       expect(vm.$children[0].scrollTo).toHaveBeenCalledWith(
-  //         vm.$children[0].viewport().top + vm.$children[0].pointerHeight()
-  //       );
-  //     });
-  //   });
-  //
-  //   describe("Measuring pixel distances", () => {
-  //     it("should calculate pointerHeight as the offsetHeight of the pointer element if it exists", () => {
-  //       const vm = new Vue({
-  //         template: `<div><v-select :options="['one', 'two', 'three']"></v-select></div>`
-  //       }).$mount();
-  //
-  //       // dropdown must be open for $refs to exist
-  //       vm.$children[0].open = true;
-  //
-  //       Vue.nextTick(() => {
-  //         //  Fresh instances start with the pointer at -1
-  //         vm.$children[0].typeAheadPointer = -1;
-  //         expect(vm.$children[0].pointerHeight()).toEqual(0);
-  //
-  //         vm.$children[0].typeAheadPointer = 100;
-  //         expect(vm.$children[0].pointerHeight()).toEqual(0);
-  //
-  //         vm.$children[0].typeAheadPointer = 1;
-  //         expect(vm.$children[0].pointerHeight()).toEqual(
-  //           vm.$children[0].$refs.dropdownMenu.children[1].offsetHeight
-  //         );
-  //       });
-  //     });
-  //   });
+  it("should move the pointer visually up the list on up arrow keyDown", () => {
+    const Select = mountDefault();
+
+    Select.vm.typeAheadPointer = 1;
+
+    Select.find({ ref: "search" }).trigger("keydown", { keyCode: 38 });
+
+    expect(Select.vm.typeAheadPointer).toEqual(0);
+  });
+
+  it("should move the pointer visually down the list on down arrow keyDown", () => {
+    const Select = mountDefault();
+
+    Select.vm.typeAheadPointer = 1;
+
+    Select.find({ ref: "search" }).trigger("keydown", { keyCode: 40 });
+
+    expect(Select.vm.typeAheadPointer).toEqual(2);
+  });
+
+  it("should not move the pointer past the end of the list", () => {
+    const Select = mountDefault();
+
+    Select.vm.typeAheadPointer = 2;
+    Select.vm.typeAheadDown();
+    expect(Select.vm.typeAheadPointer).toEqual(2);
+  });
+
+  describe("Automatic Scrolling", () => {
+    it("should check if the scroll position needs to be adjusted on up arrow keyDown", () => {
+      const Select = mountDefault();
+      const spy = jest.spyOn(Select.vm, "maybeAdjustScroll");
+
+      Select.vm.typeAheadPointer = 1;
+
+      Select.find({ ref: "search" }).trigger("keydown", { keyCode: 38 });
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should check if the scroll position needs to be adjusted on down arrow keyDown", () => {
+      const Select = mountDefault();
+      const spy = jest.spyOn(Select.vm, "maybeAdjustScroll");
+
+      Select.vm.typeAheadPointer = 1;
+
+      Select.find({ ref: "search" }).trigger("keydown", { keyCode: 40 });
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should check if the scroll position needs to be adjusted when filtered options changes", () => {
+      const Select = mountDefault();
+      const spy = jest.spyOn(Select.vm, "maybeAdjustScroll");
+
+      Select.vm.search = "two";
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should scroll up if the pointer is above the current viewport bounds", () => {
+      const Select = mountDefault();
+      const spy = jest.spyOn(Select.vm, "scrollTo");
+
+      Select.setMethods({
+        pixelsToPointerTop() {
+          return 1;
+        },
+        viewport() {
+          return { top: 2, bottom: 0 };
+        }
+      });
+
+      Select.vm.maybeAdjustScroll();
+
+      expect(spy).toHaveBeenCalledWith(1);
+    });
+
+    it("should scroll down if the pointer is below the current viewport bounds", () => {
+      const Select = mountDefault();
+      const spy = jest.spyOn(Select.vm, "scrollTo");
+
+      Select.setMethods({
+        pixelsToPointerBottom() {
+          return 2;
+        },
+        viewport() {
+          return { top: 0, bottom: 1 };
+        }
+      });
+
+      Select.vm.maybeAdjustScroll();
+      expect(spy).toHaveBeenCalledWith(
+        Select.vm.viewport().top + Select.vm.pointerHeight()
+      );
+    });
+  });
+
+  describe("Measuring pixel distances", () => {
+    it("should calculate pointerHeight as the offsetHeight of the pointer element if it exists", () => {
+      const Select = mountDefault();
+
+      // Drop down must be open for $refs to exist
+      Select.vm.open = true;
+
+      /**
+       * Since JSDom doesn't render layouts, set the offsetHeight explicitly
+       * to 25px for each list item.
+       *
+       * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+       */
+      let i = 0;
+      for (let option of Select.vm.$refs.dropdownMenu.children) {
+        Object.defineProperty(option, "offsetHeight", {
+          value: 1 + i
+        });
+        i++;
+      }
+
+      //  Fresh instances start with the pointer at -1
+      Select.vm.typeAheadPointer = -1;
+      expect(Select.vm.pointerHeight()).toEqual(0);
+
+      Select.vm.typeAheadPointer = 0;
+      expect(Select.vm.pointerHeight()).toEqual(1);
+
+      Select.vm.typeAheadPointer = 1;
+      expect(Select.vm.pointerHeight()).toEqual(2);
+
+      Select.vm.typeAheadPointer = 2;
+      expect(Select.vm.pointerHeight()).toEqual(3);
+    });
+  });
 });

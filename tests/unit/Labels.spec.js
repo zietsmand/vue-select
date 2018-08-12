@@ -13,7 +13,7 @@ describe("Labels", () => {
   });
 
   it("will console.warn when options contain objects without a valid label key", () => {
-    const spy = jest.spyOn(console, "warn");
+    const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
     const Select = selectWithProps({
       options: [{}]
     });
@@ -28,7 +28,7 @@ describe("Labels", () => {
   it("should display a placeholder if the value is empty", () => {
     const Select = shallowMount(VueSelect, {
       propsData: {
-        options: [{ label: "one" }]
+        options: ["one"]
       },
       attrs: {
         placeholder: "foo"
@@ -36,7 +36,7 @@ describe("Labels", () => {
     });
 
     expect(Select.vm.searchPlaceholder).toEqual("foo");
-    Select.vm.mutableValue = { label: "one" };
+    Select.vm.mutableValue = "one";
     expect(Select.vm.searchPlaceholder).not.toBeDefined();
   });
 });

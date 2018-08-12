@@ -141,7 +141,7 @@ describe("When index prop is defined", () => {
   });
 
   it("will console.warn when attempting to select an option with an undefined index", () => {
-    const spy = jest.spyOn(console, "warn");
+    const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
     const Select = shallowMount(VueSelect, {
       propsData: {
         index: "value",

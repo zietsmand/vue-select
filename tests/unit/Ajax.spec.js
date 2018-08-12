@@ -1,9 +1,8 @@
-import { shallowMount } from "@vue/test-utils";
-import VueSelect from "../../src/components/Select";
+import { selectWithProps } from "../helpers";
 
 describe("Asynchronous Loading", () => {
   it("can toggle the loading class", () => {
-    const Select = shallowMount(VueSelect);
+    const Select = selectWithProps();
 
     Select.vm.toggleLoading();
     expect(Select.vm.mutableLoading).toEqual(true);
@@ -15,7 +14,7 @@ describe("Asynchronous Loading", () => {
   it("should trigger the onSearch callback when the search text changes", () => {
     const propsData = { onSearch: () => {} };
     const spy = jest.spyOn(propsData, "onSearch");
-    const Select = shallowMount(VueSelect, { propsData });
+    const Select = selectWithProps(propsData);
 
     Select.vm.search = "foo";
 
@@ -30,7 +29,7 @@ describe("Asynchronous Loading", () => {
       }
     };
     const spy = jest.spyOn(propsData, "onSearch");
-    const Select = shallowMount(VueSelect, { propsData });
+    const Select = selectWithProps(propsData);
 
     Select.vm.search = "foo";
     Select.vm.search = "";
@@ -40,7 +39,7 @@ describe("Asynchronous Loading", () => {
   });
 
   it("should trigger the search event when the search text changes", () => {
-    const Select = shallowMount(VueSelect);
+    const Select = selectWithProps();
 
     Select.vm.search = "foo";
 
@@ -51,7 +50,7 @@ describe("Asynchronous Loading", () => {
   });
 
   it("should not trigger the search event if the search text is empty", () => {
-    const Select = shallowMount(VueSelect);
+    const Select = selectWithProps();
 
     Select.vm.search = "foo";
     Select.vm.search = "";
@@ -63,8 +62,8 @@ describe("Asynchronous Loading", () => {
   });
 
   it("can set loading to false from the onSearch callback", () => {
-    const Select = shallowMount(VueSelect, {
-      propsData: { onSearch: (search, loading) => loading(false) }
+    const Select = selectWithProps({
+      onSearch: (search, loading) => loading(false)
     });
 
     Select.vm.search = "foo";
@@ -73,8 +72,8 @@ describe("Asynchronous Loading", () => {
   });
 
   it("can set loading to true from the onSearch callback", () => {
-    const Select = shallowMount(VueSelect, {
-      propsData: { onSearch: (search, loading) => loading(true) }
+    const Select = selectWithProps({
+      onSearch: (search, loading) => loading(true)
     });
 
     Select.vm.search = "foo";
@@ -83,9 +82,7 @@ describe("Asynchronous Loading", () => {
   });
 
   it("will sync mutable loading with the loading prop", () => {
-    const Select = shallowMount(VueSelect, {
-      propsData: { loading: false }
-    });
+    const Select = selectWithProps({ loading: false });
     Select.setProps({ loading: true });
     expect(Select.vm.mutableLoading).toEqual(true);
   });

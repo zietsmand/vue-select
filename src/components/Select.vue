@@ -14,7 +14,7 @@
      attribute does most of the work for us by rearranging the child elements visually.
    */
   .v-select[dir="rtl"] .vs__actions {
-    padding: 0 3px 0 4px;
+    padding: 0 3px 0 6px;
   }
   .v-select[dir="rtl"] .dropdown-toggle .clear {
     margin-left: 6px;

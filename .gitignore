@@ -20,6 +20,7 @@ yarn-error.log*
 *.sw*
 
 # Project specific
+coverage
 test/unit/coverage
 .coveralls.yml
 .flowconfig

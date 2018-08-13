@@ -27,7 +27,6 @@
     "lodash": "^4.17.10",
     "normalize.css": "^7.0.0",
     "prismjs": "^1.15.0",
-    "vue-resource": "^1.5.1",
     "vue-select": "*",
     "vue-template-compiler": "^2.5.17"
   },

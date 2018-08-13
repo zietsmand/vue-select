@@ -43,7 +43,7 @@
     <v-select placeholder="disabled multiple" disabled multiple :value="['disabled', 'multiple']"></v-select>
     <v-select placeholder="filterable=false, @search=searchPeople" label="first_name" :filterable="false" @search="searchPeople" :options="people"></v-select>
     <v-select placeholder="filtering with fuse.js" label="title" :options="fuseSearchOptions" :filter="fuseSearch">
-      <template slot="option" scope="option">
+      <template slot="option" slot-scope="option">
         <strong>{{ option.title }}</strong><br>
         <em>{{ `${option.author.firstName} ${option.author.lastName}` }}</em>
       </template>

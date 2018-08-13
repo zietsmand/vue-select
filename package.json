@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve ./dev/dev.js",
     "build": "vue-cli-service build --target lib ./src/index.js",
+    "build:dev": "vue-cli-service build --dest ./dev/dist ./dev/dev.js ",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },

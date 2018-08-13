@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default [
   {
     title: "Old Man's War",

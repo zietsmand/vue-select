@@ -1,4 +1,4 @@
-## Vue Compatibility
+### Vue Compatibility
 -  `vue ~2.0` use `vue-select ~2.0`
 -  `vue ~1.0` use `vue-select ~1.0`
 
@@ -40,4 +40,4 @@ Then register the component in your javascript:
 Vue.component('v-select', VueSelect.VueSelect);
 ```
 
-[](codepen://sagalbot/dJjzeP)
+<CodePen url="dJjzeP" />

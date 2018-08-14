@@ -1,4 +1,4 @@
-## Dropdown Options {#options}
+# Dropdown Options
 
 `vue-select` accepts arrays of strings or objects to use as options through the `options` prop:
 
@@ -12,7 +12,7 @@ When provided an array of objects, `vue-select` will display a single value of t
 <v-select :options="[{label: 'foo', value: 'Foo'}]"></v-select>
 ```
 
-### Option Labels {#labels}
+## Option Labels
 
 When the `options` array contains objects, `vue-select` looks for the `label` key to display by default. You can set your own label to match your source data using the `label` prop.
 
@@ -31,10 +31,10 @@ If you wanted to display `Canada` in the dropdown, you'd use the `countryName` k
 <v-select label="countryName" :options="countries"></v-select>
 ```
 
-[](codepen://sagalbot/aEjLPB?height=500)
+<CodePen url="aEjLPB" height="50"/>
 
 
-### Option index {#values}
+## Option Object Key
 
 When the `options` array contains objects, `vue-select` returns the whole object as dropdown value upon selection. You can specify your own `index` prop to return only the value contained in the specific property.
 
@@ -53,7 +53,6 @@ If you wanted to return `CA` in the dropdown when `Canada` is selected, you'd us
 <v-select index="value" :options="countries"></v-select>
 ```
 
-
-### Null / Empty Options {#null}
+## Null / Empty Options
 
 `vue-select` requires the `option` property to be an `array`. If you are using Vue in development mode, you will get warnings attempting to pass anything other than an `array` to the `options` prop. If you need a `null`/`empty` value, use an empty array `[]`.

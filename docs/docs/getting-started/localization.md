@@ -1,4 +1,4 @@
-### RTL
+## RTL
 
 vue-select supports RTL using the standard HTML API using the `dir` attribute.
 
@@ -8,11 +8,11 @@ vue-select supports RTL using the standard HTML API using the `dir` attribute.
 
 The `dir` attribute accepts the same values as the [HTML spec](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir): `rtl`,`ltr`, and `auto`.
 
-### Component Text
+## Component Text
 
 All of the text within the component has been wrapped within [slots](https://vuejs.org/v2/guide/components.html#Content-Distribution-with-Slots) and can be replaced in your app.
 
-##### Loading Spinner
+### Loading Spinner
 *Slot Definition:*
 ```html
 <slot name="spinner">
@@ -26,7 +26,7 @@ All of the text within the component has been wrapped within [slots](https://vue
 </v-select>
 ```
 
-##### No Options Text
+### No Options Text
 *Slot Definition:*
 ```html
 <slot name="no-options">Sorry, no matching options.</slot>
@@ -38,6 +38,6 @@ All of the text within the component has been wrapped within [slots](https://vue
 </v-select>
 ```
 
-For a full list of component slots, view the [slots API docs](Api/Slots.md).
+For a full list of component slots, view the [slots API docs](../api/slots.md).
 
-[](codepen://sagalbot/oZmLVN?height=250)
+<CodePen url="oZmLVN" height="25"/>

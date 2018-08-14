@@ -22,9 +22,6 @@ yarn-error.log*
 # Project specific
 coverage
 test/unit/coverage
-.coveralls.yml
-.flowconfig
-docs/gitbook/_book
-docs/node_modules
-site
+package-lock.json
 dev/dist
+docs/.vuepress/dist

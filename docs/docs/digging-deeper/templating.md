@@ -14,4 +14,4 @@ vue-select provides the scoped `option` slot in order to create custom dropdown 
 Using the `option` slot with `slot-scope="option"` gives the 
 provides the current option variable to the template.
 
-[](codepen://sagalbot/NXBwYG?height=500)
+<CodePen url="NXBwYG" height="50"/>

@@ -50,9 +50,6 @@ module.exports = {
     repo: 'sagalbot/vue-select',
     editLinks: true,
     docsDir: 'docs',
-    nav: [
-      {text: 'Docs', link: '/guide/'},
-    ],
     sidebar: {
       '/docs/': [
         {

@@ -1,8 +1,5 @@
-export default ({
-                  Vue, // the version of Vue being used in the VuePress app
-                  options, // the options for the root Vue instance
-                  router, // the router instance for the app
-                  siteData // site metadata
-                }) => {
-  console.log(options)
+import vSelect from '../../src/components/Select';
+
+export default ({Vue, options, router, siteData}) => {
+  Vue.component('v-select', vSelect);
 }

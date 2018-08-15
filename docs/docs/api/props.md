@@ -1,4 +1,4 @@
-## `value`
+## value
 
 Contains the currently selected value. Very similar to a
 `value` attribute on an `<input>`. You can listen for changes
@@ -10,7 +10,7 @@ value: {
 },
 ```
 
-## `options`
+## options
 
 An array of strings or objects to be used as dropdown choices.
 If you are using an array of objects, vue-select will look for
@@ -26,7 +26,7 @@ options: {
 },
 ```
 
-## `disabled`
+## disabled
 
 Disable the entire component.
 
@@ -37,7 +37,7 @@ disabled: {
 },
 ```
 
-## `clearable`
+## clearable
 
 Can the user clear the selected property?
 
@@ -48,7 +48,7 @@ clearable: {
 },
 ```
 
-## `maxHeight`
+## maxHeight
 
 Sets the max-height property on the dropdown list.
 
@@ -59,7 +59,7 @@ maxHeight: {
 },
 ```
 
-## `searchable`
+## searchable
 
 Enable/disable filtering the options.
 
@@ -70,7 +70,7 @@ searchable: {
 },
 ```
 
-## `multiple`
+## multiple
 
 Equivalent to the `multiple` attribute on a `<select>` input.
 
@@ -81,7 +81,7 @@ multiple: {
 },
 ```
 
-## `placeholder`
+## placeholder
 
 Equivalent to the `placeholder` attribute on an `<input>`.
 
@@ -92,7 +92,7 @@ placeholder: {
 },
 ```
 
-## `transition`
+## transition
 
 Sets a Vue transition property on the `.dropdown-menu`. vue-select
 does not include CSS for transitions, you'll need to add them yourself.
@@ -104,7 +104,7 @@ transition: {
 },
 ```
 
-## `clearSearchOnSelect`
+## clearSearchOnSelect
 
 Enables/disables clearing the search text when an option is selected.
 
@@ -115,7 +115,7 @@ clearSearchOnSelect: {
 },
 ```
 
-## `closeOnSelect`
+## closeOnSelect
 
 Close a dropdown when an option is chosen. Set to false to keep the dropdown
 open (useful when combined with multi-select, for example)
@@ -127,7 +127,7 @@ closeOnSelect: {
 },
 ```
 
-## `label`
+## label
 
 Tells vue-select what key to use when generating option
 labels when each `option` is an object.
@@ -139,7 +139,7 @@ label: {
 },
 ```
 
-## `index`
+## index
 
 Tells vue-select what key to use when generating option
 values when each `option` is an object.
@@ -151,7 +151,7 @@ index: {
 },
 ```
 
-## `getOptionLabel`
+## getOptionLabel
 
 Callback to generate the label text. If `{option}`
 is an object, returns `option[this.label]` by default.
@@ -184,7 +184,7 @@ getOptionLabel: {
 },
 ```
 
-## `onChange`
+## onChange
 
 An optional callback function that is called each time the selected
 value(s) change. When integrating with Vuex, use this callback to trigger
@@ -199,7 +199,7 @@ onChange: {
 },
 ```
 
-## `onTab`
+## onTab
 
 Select the current value if `selectOnTab` is enabled
 
@@ -214,7 +214,7 @@ onTab: {
 },
 ```
 
-## `taggable`
+## taggable
 
 Enable/disable creating options from searchInput.
 
@@ -225,7 +225,7 @@ taggable: {
 },
 ```
 
-## `tabindex`
+## tabindex
 
 Set the tabindex for the input field.
 
@@ -236,7 +236,7 @@ tabindex: {
 },
 ```
 
-## `pushTags`
+## pushTags
 
 When true, newly created tags will be added to
 the options list.
@@ -248,7 +248,7 @@ pushTags: {
 },
 ```
 
-## `filterable`
+## filterable
 
 When true, existing options will be filtered
 by the search text. Should not be used in conjunction
@@ -261,7 +261,7 @@ filterable: {
 },
 ```
 
-## `filterBy`
+## filterBy
 
 Callback to determine if the provided option should
 match the current search text. Used to determine
@@ -276,7 +276,7 @@ filterBy: {
 },
 ```
 
-## `filter`
+## filter
 
 Callback to filter results when search text
 is provided. Default implementation loops
@@ -298,7 +298,7 @@ filter: {
 },
 ```
 
-## `createOption`
+## createOption
 
 User defined function for adding Options
 
@@ -315,7 +315,7 @@ createOption: {
 },
 ```
 
-## `resetOnOptionsChange`
+## resetOnOptionsChange
 
 When false, updating the options will not reset the select value
 
@@ -326,7 +326,7 @@ resetOnOptionsChange: {
 },
 ```
 
-## `noDrop`
+## noDrop
 
 Disable the dropdown entirely.
 
@@ -337,7 +337,7 @@ noDrop: {
 },
 ```
 
-## `inputId`
+## inputId
 
 Sets the id of the input element.
 
@@ -347,7 +347,7 @@ inputId: {
 },
 ```
 
-## `dir`
+## dir
 
 Sets RTL support. Accepts `ltr`, `rtl`, `auto`.
 
@@ -358,7 +358,7 @@ dir: {
 },
 ```
 
-## `selectOnTab`
+## selectOnTab
 
 When true, hitting the 'tab' key will select the current select value
 

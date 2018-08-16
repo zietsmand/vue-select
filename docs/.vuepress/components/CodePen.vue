@@ -1,6 +1,6 @@
 <template>
   <p :data-height="height"
-     data-theme-id="dark"
+     data-theme-id="32252"
      :data-slug-hash="url"
      data-default-tab="result"
      data-user="sagalbot"

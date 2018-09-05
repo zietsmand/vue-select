@@ -1,6 +1,6 @@
 ## AJAX Remote Option Loading
 
-<CodePen url="POMeOX" height="40"/>
+<CodePen url="POMeOX" height="400"/>
 
 The `onSearch` prop allows you to load options via ajax in a parent component 
 when the search text is updated. It is invoked with two parameters, `search` & `loading`.

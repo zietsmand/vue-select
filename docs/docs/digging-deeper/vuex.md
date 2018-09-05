@@ -13,4 +13,4 @@ action, or trigger a mutation.
   ></v-select>
 ``` 
 
-<CodePen url="aJQJyp" height="50"/>
+<CodePen url="aJQJyp" height="350"/>

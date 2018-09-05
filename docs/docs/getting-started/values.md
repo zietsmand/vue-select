@@ -24,7 +24,7 @@ By default, `vue-select` supports choosing a single value. If you need multiple 
 <v-select multiple v-model="selected"></v-select>
 ```
 
-<CodePen url="opMGro" height="25"/>
+<CodePen url="opMGro" height="250"/>
 
 ## Tagging
 
@@ -37,7 +37,7 @@ If you want new tags to be pushed to the options list, set `push-tags` to true.
 
 ## Return a Single Key from an Object
 
-<CodePen url="XVoWxm" height="35"/>
+<CodePen url="XVoWxm" height="350"/>
 
 When the `options` array contains objects, `vue-select` returns the whole object as dropdown value upon selection. You can specify your own `index` prop to return only the value contained in the specific property.
 

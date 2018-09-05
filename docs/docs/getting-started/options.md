@@ -31,7 +31,7 @@ If you wanted to display `Canada` in the dropdown, you'd use the `countryName` k
 <v-select label="countryName" :options="countries"></v-select>
 ```
 
-<CodePen url="aEjLPB" height="50"/>
+<CodePen url="aEjLPB" height="450"/>
 
 
 ## Option Object Key

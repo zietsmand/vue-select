@@ -40,4 +40,4 @@ All of the text within the component has been wrapped within [slots](https://vue
 
 For a full list of component slots, view the [slots API docs](../api/slots.md).
 
-<CodePen url="oZmLVN" height="25"/>
+<CodePen url="oZmLVN" height="450"/>

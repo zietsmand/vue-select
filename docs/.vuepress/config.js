@@ -84,5 +84,10 @@ module.exports = {
       ],
     },
   },
-
+  postcss: {
+    plugins: [
+      require("tailwindcss")("./docs/.vuepress/tailwind.config.js"),
+      require("autoprefixer")
+    ]
+  }
 };

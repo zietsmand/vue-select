@@ -1,3 +1,6 @@
-@import '~normalize.css';
+@tailwind preflight;
+@tailwind components;
+@tailwind utilities;
+
 @import 'demo';
-@import 'cyan_theme';
+

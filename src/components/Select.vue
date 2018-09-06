@@ -79,6 +79,7 @@
     flex-grow: 1;
     flex-wrap: wrap;
     padding: 0 2px;
+    position: relative;
   }
   .v-select .vs__actions {
     display: flex;
@@ -145,13 +146,17 @@
     line-height: 1.42857143; /* Normalize line height */
     margin: 4px 2px 0px 2px;
     padding: 0 0.25em;
+    transition: opacity .25s;
   }
   .v-select.single .selected-tag {
     background-color: transparent;
     border-color: transparent;
   }
-  .v-select.single.open .selected-tag,
-  .v-select.single.loading .selected-tag {
+  .v-select.single.open .selected-tag {
+    position: absolute;
+    opacity: .4;
+  }
+  .v-select.single.searching .selected-tag {
     display: none;
   }
   .v-select .selected-tag .close {
@@ -191,33 +196,21 @@
     font-size: 1em;
     display: inline-block;
     border: 1px solid transparent;
+    border-left: none;
     outline: none;
     margin: 4px 0 0 0;
-    padding: 0 0.5em;
+    padding: 0 7px;
     max-width: 100%;
     background: none;
     box-shadow: none;
-
-    /* `flex-grow` will stretch the input to take all remaining space, but We
-       need to ensure a small amount of space so there's room to type input. We'll
-       set the input to "hidden" (via width: 0) when the dropdown is closed, to
-       prevent adding a "blank" line (see: https://github.com/sagalbot/vue-select/pull/512).
-       In that case, the flex-grow will still stretch the input to take any
-       available space, on the same "line."
-    */
     flex-grow: 1;
-    width: 4em;
+    width: 0;
   }
   .v-select.unsearchable input[type="search"] {
     opacity: 0;
   }
   .v-select.unsearchable input[type="search"]:hover {
     cursor: pointer;
-  }
-  .v-select input[type="search"].hidden {
-    border: none;
-    padding: 0;
-    width: 0;
   }
 
   /* List Items */
@@ -343,7 +336,6 @@
                 @focus="onSearchFocus"
                 type="search"
                 class="form-control"
-                :class="inputClasses"
                 autocomplete="off"
                 :disabled="disabled"
                 :placeholder="searchPlaceholder"
@@ -1071,16 +1063,6 @@
           loading: this.mutableLoading,
           rtl: this.dir === 'rtl', // This can be removed - styling is handled by `dir="rtl"` attribute
           disabled: this.disabled
-        }
-      },
-
-      /**
-       * Classes to be output on input.form-control
-       * @return {Object}
-       */
-      inputClasses() {
-        return {
-          hidden: !this.isValueEmpty && !this.dropdownOpen && !this.mutableLoading
         }
       },
 

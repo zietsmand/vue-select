@@ -323,29 +323,9 @@
           </span>
         </slot>
 
-        <input
-                ref="search"
-                v-model="search"
-                @keydown.delete="maybeDeleteValue"
-                @keyup.esc="onEscape"
-                @keydown.up.prevent="typeAheadUp"
-                @keydown.down.prevent="typeAheadDown"
-                @keydown.enter.prevent="typeAheadSelect"
-                @keydown.tab="onTab"
-                @blur="onSearchBlur"
-                @focus="onSearchFocus"
-                type="search"
-                class="form-control"
-                autocomplete="off"
-                :disabled="disabled"
-                :placeholder="searchPlaceholder"
-                :tabindex="tabindex"
-                :readonly="!searchable"
-                :id="inputId"
-                role="combobox"
-                :aria-expanded="dropdownOpen"
-                aria-label="Search for option"
-        >
+        <slot name="search" v-bind="scope.search">
+          <input v-bind="scope.search.attributes" v-on="scope.search.events">
+        </slot>
 
       </div>
       <div class="vs__actions">
@@ -583,7 +563,7 @@
       },
 
       /**
-       * Enable/disable creating options from searchInput.
+       * Enable/disable creating options from searchEl.
        * @type {Boolean}
        */
       taggable: {
@@ -721,6 +701,16 @@
       selectOnTab: {
         type: Boolean,
         default: false
+      },
+
+      /**
+       * Query Selector used to find the search input
+       * when the 'search' scoped slot is used.
+       * @type {String}
+       */
+      searchInputQuerySelector: {
+        type: String,
+        default: '[type=search]'
       }
     },
 
@@ -871,7 +861,7 @@
       onAfterSelect(option) {
         if (this.closeOnSelect) {
           this.open = !this.open
-          this.$refs.search.blur()
+          this.searchEl.blur()
         }
 
         if (this.clearSearchOnSelect) {
@@ -885,14 +875,14 @@
        * @return {void}
        */
       toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle ||
+        if (e.target === this.$refs.openIndicator || e.target === this.searchEl || e.target === this.$refs.toggle ||
             e.target.classList.contains('selected-tag') || e.target === this.$el) {
           if (this.open) {
-            this.$refs.search.blur() // dropdown will close on blur
+            this.searchEl.blur() // dropdown will close on blur
           } else {
             if (!this.disabled) {
               this.open = true
-              this.$refs.search.focus()
+              this.searchEl.focus()
             }
           }
         }
@@ -957,7 +947,7 @@
        */
       onEscape() {
         if (!this.search.length) {
-          this.$refs.search.blur()
+          this.searchEl.blur()
         } else {
           this.search = ''
         }
@@ -996,7 +986,7 @@
        * @return {this.value}
        */
       maybeDeleteValue() {
-        if (!this.$refs.search.value.length && this.mutableValue) {
+        if (!this.searchEl.value.length && this.mutableValue) {
           return this.multiple ? this.mutableValue.pop() : this.mutableValue = null
         }
       },
@@ -1044,10 +1034,94 @@
        */
       onMousedown() {
         this.mousedown = true
+      },
+
+      /**
+       * Search 'input' KeyBoardEvent handler.
+       * @param e {KeyboardEvent}
+       * @return {Function}
+       */
+      onSearchKeyDown (e) {
+        switch (e.which) {
+          case 8:
+            //  delete
+            return this.maybeDeleteValue();
+        }
+      },
+
+      /**
+       * Search 'input' KeyBoardEvent handler.
+       * @param e {KeyboardEvent}
+       * @return {Function}
+       */
+      onSearchKeyUp (e) {
+        switch (e.which) {
+          case 27:
+            //  esc
+            return this.onEscape();
+          case 38:
+            //  up.prevent
+            e.preventDefault();
+            return this.typeAheadUp();
+          case 40:
+            //  down.prevent
+            e.preventDefault();
+            return this.typeAheadDown();
+          case 13:
+            //  enter.prevent
+            e.preventDefault();
+            return this.typeAheadSelect();
+          case 9:
+            //  tab
+            return this.onTab();
+        }
       }
     },
 
     computed: {
+
+      /**
+       * Find the search input DOM element.
+       * @returns {HTMLInputElement}
+       */
+      searchEl () {
+        return !!this.$scopedSlots['search']
+          ? this.$refs.selectedOptions.querySelector(this.searchInputQuerySelector)
+          : this.$refs.search;
+      },
+
+      /**
+       * The object to be bound to the $slots.search scoped slot.
+       * @returns {Object}
+       */
+      scope () {
+        return {
+          search: {
+            attributes: {
+              'disabled': this.disabled,
+              'placeholder': this.searchPlaceholder,
+              'tabindex': this.tabindex,
+              'readonly': !this.searchable,
+              'id': this.inputId,
+              'value': this.search,
+              'aria-expanded': this.dropdownOpen,
+              'aria-label': 'Search for option',
+              'ref': 'search',
+              'role': 'combobox',
+              'type': 'search',
+              'autocomplete': 'off',
+              'class': 'form-control',
+            },
+            events: {
+              'keydown': this.onSearchKeyDown,
+              'keyup': this.onSearchKeyUp,
+              'blur': this.onSearchBlur,
+              'focus': this.onSearchFocus,
+              'input': (e) => this.search = e.target.value,
+            },
+          },
+        };
+      },
 
       /**
        * Classes to be output on .dropdown

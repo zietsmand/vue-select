@@ -904,18 +904,12 @@
        * @return {Boolean}        True when selected | False otherwise
        */
       isOptionSelected(option) {
-        let selected = false
-        let i = 0
-        while (!selected && i < this.valueAsArray.length) {
-          let value = this.valueAsArray[i]
+        return this.valueAsArray.some(value => {
           if (typeof value === 'object') {
-            selected = this.optionObjectComparator(value, option)
-          } else if (value === option || value === option[i]) {
-            selected = true
+            return this.optionObjectComparator(value, option)
           }
-          i++
-        }
-        return selected
+          return value === option || value === option[this.index]
+        })
       },
 
       /**

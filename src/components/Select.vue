@@ -969,15 +969,14 @@
        * @return {void}
        */
       onSearchBlur() {
-        if (this.mousedown && !this.searching) {
+        if(this.mousedown){
           this.mousedown = false
-        } else {
-          if (this.clearSearchOnBlur) {
-            this.search = ''
-          }
-          this.open = false
-          this.$emit('search:blur')
         }
+        if (this.clearSearchOnBlur) {
+          this.search = ''
+        }
+        this.open = false
+        this.$emit('search:blur')
       },
 
       /**

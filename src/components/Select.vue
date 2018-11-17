@@ -969,11 +969,29 @@
        * @return {void}
        */
       onSearchBlur() {
-        
-        this.mousedown = false
-        if (this.clearSearchOnBlur) {
-          this.search = ''
+
+        if (this.mousedown && !this.searching) {
+          this.mousedown = false
+        } else {
+          if (this.clearSearchOnBlur) {
+            this.search = ''
+          }
+          this.closeSearchOptions()
         }
+
+        // Fixed bug where no-options message could not be closed
+        if(this.search.length === 0 && this.options.length === 0){
+          this.closeSearchOptions()
+        }
+        
+      },
+
+      /**
+       * 'Private' function to close the search options
+       * @emits  {search:blur}
+       * @returns {void}
+       */
+      closeSearchOptions(){
         this.open = false
         this.$emit('search:blur')
       },

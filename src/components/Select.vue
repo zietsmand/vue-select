@@ -566,7 +566,14 @@
       onChange: {
         type: Function,
         default: function (val) {
-          this.$emit('input', val)
+          this.$emit('change', val);
+        }
+      },
+
+      onInput: {
+        type: Function,
+        default: function (val) {
+          this.$emit('input', val);
         }
       },
 
@@ -830,6 +837,7 @@
           } else {
             this.mutableValue = option
           }
+          this.onInput(this.mutableValue);
         }
 
         this.onAfterSelect(option)
@@ -853,6 +861,7 @@
         } else {
           this.mutableValue = null
         }
+        this.onInput(this.mutableValue);
       },
 
       /**
@@ -861,6 +870,7 @@
        */
       clearSelection() {
         this.mutableValue = this.multiple ? [] : null
+        this.onInput(this.mutableValue)
       },
 
       /**

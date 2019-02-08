@@ -906,8 +906,8 @@
       isOptionSelected(option) {
           let selected = false
           this.valueAsArray.forEach(value => {
-            if (typeof value === 'object') {
-              selected = this.optionObjectComparator(value, option)
+           if (typeof value === 'object' && this.optionObjectComparator(value, option)) {
+              selected = true
             } else if (value === option || value === option[this.index]) {
               selected = true
             }

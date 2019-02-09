@@ -1,7 +1,11 @@
 {
   "name": "vue-select",
-  "version": "0.1.0",
-  "private": true,
+  "version": "2.5.1",
+  "description": "A native Vue.js component that provides similar functionality to Select2 without the overhead of jQuery.",
+  "author": "Jeff Sagal <sagalbot@gmail.com>",
+  "private": false,
+  "main": "dist/vue-select.js",
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve ./dev/dev.js",
     "build": "vue-cli-service build --target lib ./src/index.js",

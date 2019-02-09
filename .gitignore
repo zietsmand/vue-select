@@ -29,3 +29,4 @@ docs/gitbook/_book
 docs/node_modules
 site
 dev/dist
+dist

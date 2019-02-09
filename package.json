@@ -3,7 +3,6 @@
   "version": "2.5.1",
   "description": "A native Vue.js component that provides similar functionality to Select2 without the overhead of jQuery.",
   "author": "Jeff Sagal <sagalbot@gmail.com>",
-  "private": false,
   "main": "dist/vue-select.js",
   "license": "MIT",
   "scripts": {
@@ -89,7 +88,6 @@
     ],
     "coverageReporters": [
       "html",
-      "text-lcov",
       "text-summary"
     ]
   },

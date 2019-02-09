@@ -75,8 +75,11 @@
         <v-select placeholder="filtering with fuse.js" label="title" :options="fuseSearchOptions" :filter="fuseSearch">
             <template slot="option" scope="option">
                 <strong>{{ option.title }}</strong><br>
-                <em>{{ `${option.author.firstName} ${option.author.lastName}` }}</em>
+                <em>{{ option.author.firstName + ' ' + option.author.lastName }}</em>
             </template>
+        </v-select>
+        <v-select placeholder="Vue select with no options and a custom no-option span" >
+            <span slot="no-options">Custom no options message</span>
         </v-select>
     </div>
 </body>

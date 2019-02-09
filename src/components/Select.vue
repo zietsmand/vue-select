@@ -915,15 +915,12 @@
        * @return {Boolean}        True when selected | False otherwise
        */
       isOptionSelected(option) {
-          let selected = false
-          this.valueAsArray.forEach(value => {
-           if (typeof value === 'object' && this.optionObjectComparator(value, option)) {
-              selected = true
-            } else if (value === option || value === option[this.index]) {
-              selected = true
-            }
-          })
-          return selected
+        return this.valueAsArray.some(value => {
+          if (typeof value === 'object') {
+            return this.optionObjectComparator(value, option)
+          }
+          return value === option || value === option[this.index]
+        })
       },
 
       /**

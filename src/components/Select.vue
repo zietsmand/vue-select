@@ -917,8 +917,8 @@
       isOptionSelected(option) {
           let selected = false
           this.valueAsArray.forEach(value => {
-            if (typeof value === 'object') {
-              selected = this.optionObjectComparator(value, option)
+           if (typeof value === 'object' && this.optionObjectComparator(value, option)) {
+              selected = true
             } else if (value === option || value === option[this.index]) {
               selected = true
             }
@@ -986,9 +986,24 @@
           if (this.clearSearchOnBlur) {
             this.search = ''
           }
-          this.open = false
-          this.$emit('search:blur')
+          this.closeSearchOptions()
+          return
         }
+        // Fixed bug where no-options message could not be closed
+        if(this.search.length === 0 && this.options.length === 0){
+          this.closeSearchOptions()
+          return
+        }
+      },
+
+      /**
+       * 'Private' function to close the search options
+       * @emits  {search:blur}
+       * @returns {void}
+       */
+      closeSearchOptions(){
+        this.open = false
+        this.$emit('search:blur')
       },
 
       /**

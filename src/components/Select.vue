@@ -122,7 +122,7 @@
     padding: 5px 0;
     margin: 0;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 1px solid rgba(0, 0, 0, .26);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,.15);
     border-top: none;
@@ -343,9 +343,8 @@
                 @blur="onSearchBlur"
                 @focus="onSearchFocus"
                 type="search"
-                class="form-control"
                 :class="inputClasses"
-                autocomplete="off"
+                :autocomplete="autocomplete"
                 :disabled="disabled"
                 :placeholder="searchPlaceholder"
                 :tabindex="tabindex"
@@ -521,6 +520,17 @@
         default: 'label'
       },
 
+
+      /**
+       * Value of the 'autocomplete' field of the input
+       * element.
+       * @type {String}
+       */
+      autocomplete: {
+        type: String,
+        default: 'off'
+      },
+
       /**
        * Tells vue-select what key to use when generating option
        * values when each `option` is an object.
@@ -575,7 +585,14 @@
       onChange: {
         type: Function,
         default: function (val) {
-          this.$emit('input', val)
+          this.$emit('change', val);
+        }
+      },
+
+      onInput: {
+        type: Function,
+        default: function (val) {
+          this.$emit('input', val);
         }
       },
 
@@ -839,6 +856,7 @@
           } else {
             this.mutableValue = option
           }
+          this.onInput(this.mutableValue);
         }
 
         this.onAfterSelect(option)
@@ -862,6 +880,7 @@
         } else {
           this.mutableValue = null
         }
+        this.onInput(this.mutableValue);
       },
 
       /**
@@ -870,6 +889,7 @@
        */
       clearSelection() {
         this.mutableValue = this.multiple ? [] : null
+        this.onInput(this.mutableValue)
       },
 
       /**
@@ -913,15 +933,12 @@
        * @return {Boolean}        True when selected | False otherwise
        */
       isOptionSelected(option) {
-          let selected = false
-          this.valueAsArray.forEach(value => {
-            if (typeof value === 'object') {
-              selected = this.optionObjectComparator(value, option)
-            } else if (value === option || value === option[this.index]) {
-              selected = true
-            }
-          })
-          return selected
+        return this.valueAsArray.some(value => {
+          if (typeof value === 'object') {
+            return this.optionObjectComparator(value, option)
+          }
+          return value === option || value === option[this.index]
+        })
       },
 
       /**
@@ -978,9 +995,28 @@
        * @return {void}
        */
       onSearchBlur() {
-        if (this.clearSearchOnBlur) {
-          this.search = ''
+        if (this.mousedown && !this.searching) {
+          this.mousedown = false
+        } else {
+          if (this.clearSearchOnBlur) {
+            this.search = ''
+          }
+          this.closeSearchOptions()
+          return
         }
+        // Fixed bug where no-options message could not be closed
+        if(this.search.length === 0 && this.options.length === 0){
+          this.closeSearchOptions()
+          return
+        }
+      },
+
+      /**
+       * 'Private' function to close the search options
+       * @emits  {search:blur}
+       * @returns {void}
+       */
+      closeSearchOptions(){
         this.open = false
         this.$emit('search:blur')
       },
@@ -1001,7 +1037,7 @@
        * @return {this.value}
        */
       maybeDeleteValue() {
-        if (!this.$refs.search.value.length && this.mutableValue) {
+        if (!this.$refs.search.value.length && this.mutableValue && this.clearable) {
           return this.multiple ? this.mutableValue.pop() : this.mutableValue = null
         }
       },

@@ -48,6 +48,9 @@
         <em>{{ `${option.author.firstName} ${option.author.lastName}` }}</em>
       </template>
     </v-select>
+    <v-select placeholder="Vue select with no options and a custom no-option span" >
+      <span slot="no-options">Custom no options message</span>
+    </v-select>
   </div>
 </template>
 

@@ -250,7 +250,7 @@ describe('Select.vue', () => {
 			expect(vm.$children[0].value).toEqual('foo')
 			expect(vm.$children[0].mutableValue).toEqual('foo')
 
-			vm.$children[0].mutableValue = 'bar'
+			vm.$children[0].select('bar')
 
 			Vue.nextTick(() => {
 				expect(vm.value).toEqual('bar')
@@ -980,7 +980,7 @@ describe('Select.vue', () => {
 			expect(vm.$children[0].value).toEqual('foo')
 			expect(vm.$children[0].mutableValue).toEqual('foo')
 
-			vm.$children[0].mutableValue = 'bar'
+			vm.$children[0].select({label: 'This is Bar', value: 'bar'})
 
 			Vue.nextTick(() => {
 				expect(vm.value).toEqual('bar')

@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import VueSelect from "../src/components/Select";
+import VueSelect from "../src/components/Select.vue";
 
 /**
  * Trigger a submit event on the search

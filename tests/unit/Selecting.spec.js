@@ -174,18 +174,18 @@ describe("VS - Selecting Values", () => {
     expect(Select.vm.isOptionSelected({ label: "one" })).toEqual(true);
   });
 
-  it("can use v-model syntax for a two way binding to a parent component", () => {
+  it.only("can use v-model syntax for a two way binding to a parent component", () => {
     const Parent = mount({
       data: () => ({ value: "foo", options: ["foo", "bar", "baz"] }),
       template: `<div><v-select :options="options" v-model="value" /></div>`,
       components: { "v-select": VueSelect }
     });
-    const Select = Parent.find(VueSelect);
+    const Select = Parent.vm.$children[0];
 
-    expect(Select.vm.value).toEqual("foo");
-    expect(Select.vm.mutableValue).toEqual("foo");
+    expect(Select.value).toEqual("foo");
+    expect(Select.mutableValue).toEqual("foo");
 
-    Select.vm.mutableValue = "bar";
+    Select.select("bar");
     expect(Parent.vm.value).toEqual("bar");
   });
 

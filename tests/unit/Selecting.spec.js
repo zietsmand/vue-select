@@ -174,7 +174,7 @@ describe("VS - Selecting Values", () => {
     expect(Select.vm.isOptionSelected({ label: "one" })).toEqual(true);
   });
 
-  it.only("can use v-model syntax for a two way binding to a parent component", () => {
+  it("can use v-model syntax for a two way binding to a parent component", () => {
     const Parent = mount({
       data: () => ({ value: "foo", options: ["foo", "bar", "baz"] }),
       template: `<div><v-select :options="options" v-model="value" /></div>`,

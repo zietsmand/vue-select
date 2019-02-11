@@ -206,12 +206,12 @@ describe("VS - Selecting Values", () => {
       expect(Select.emitted("input")[0]).toEqual(["bar"]);
     });
 
-    it("should run change when multiple is true and the value changes", () => {
+    it("will trigger the input event when the selection changes and multiple is true", () => {
       const Select = shallowMount(VueSelect, {
         propsData: { multiple: true, value: ["foo"], options: ["foo", "bar"] }
       });
       Select.vm.select("bar");
-      expect(Select.emitted("input")[0]).toEqual([["bar"]]);
+      expect(Select.emitted("input")[0]).toEqual([["foo", "bar"]]);
     });
   });
 });

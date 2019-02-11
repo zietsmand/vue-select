@@ -13,19 +13,6 @@ describe("Single value options", () => {
     expect(Select.vm.search).toEqual("");
   });
 
-  it('should apply the "hidden" class to the search input when a value is present', () => {
-    const Select = shallowMount(VueSelect, { propsData: { value: "foo" } });
-    expect(Select.vm.inputClasses.hidden).toEqual(true);
-  });
-
-  it('should not apply the "hidden" class to the search input when a value is present, and the dropdown is open', () => {
-    const Select = shallowMount(VueSelect, { propsData: { value: "foo" } });
-    Select.vm.toggleDropdown({ target: Select.vm.$refs.search });
-
-    expect(Select.vm.open).toEqual(true);
-    expect(Select.vm.inputClasses.hidden).toEqual(false);
-  });
-
   it("should not reset the search input on focus lost when clearSearchOnSelect is false", () => {
     const Select = shallowMount(VueSelect, {
       propsData: { value: "foo", clearSearchOnSelect: false }

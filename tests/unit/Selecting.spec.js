@@ -1,5 +1,5 @@
 import { mount, shallowMount } from "@vue/test-utils";
-import VueSelect from "@/components/Select.vue";
+import VueSelect from "../../src/components/Select.vue";
 
 describe("VS - Selecting Values", () => {
   let defaultProps;
@@ -202,7 +202,7 @@ describe("VS - Selecting Values", () => {
   describe("change Event", () => {
     it("will trigger the input event when the selection changes", () => {
       const Select = shallowMount(VueSelect);
-      Select.vm.$data.mutableValue = "bar";
+      Select.vm.select("bar");
       expect(Select.emitted("input")[0]).toEqual(["bar"]);
     });
 
@@ -210,7 +210,7 @@ describe("VS - Selecting Values", () => {
       const Select = shallowMount(VueSelect, {
         propsData: { multiple: true, value: ["foo"], options: ["foo", "bar"] }
       });
-      Select.vm.$data.mutableValue = ["bar"];
+      Select.vm.select("bar");
       expect(Select.emitted("input")[0]).toEqual([["bar"]]);
     });
   });

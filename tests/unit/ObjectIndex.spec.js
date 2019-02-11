@@ -122,7 +122,7 @@ describe("When index prop is defined", () => {
     expect(Select.vm.value).toEqual("foo");
     expect(Select.vm.mutableValue).toEqual("foo");
 
-    Select.vm.mutableValue = "bar";
+    Select.vm.select({ label: "This is Bar", value: "bar" });
     expect(Parent.vm.value).toEqual("bar");
   });
 

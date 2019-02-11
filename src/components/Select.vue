@@ -844,7 +844,7 @@
           if (this.multiple && !this.mutableValue) {
             this.mutableValue = [option]
           } else if (this.multiple) {
-            this.mutableValue.push(option)
+            this.mutableValue = [...this.mutableValue, option]
           } else {
             this.mutableValue = option
           }
@@ -867,8 +867,7 @@
               ref = val
             }
           })
-          var index = this.mutableValue.indexOf(ref)
-          this.mutableValue.splice(index, 1)
+          this.mutableValue = this.mutableValue.filter(entry => entry !== ref)
         } else {
           this.mutableValue = null
         }

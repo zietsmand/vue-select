@@ -117,12 +117,12 @@ describe("When index prop is defined", () => {
       template: `<div><v-select :index="index" :options="options" v-model="value"></v-select></div>`,
       components: { "v-select": VueSelect }
     });
-    const Select = Parent.find(VueSelect);
+    const Select = Parent.vm.$children[0];
 
-    expect(Select.vm.value).toEqual("foo");
-    expect(Select.vm.mutableValue).toEqual("foo");
+    expect(Select.value).toEqual("foo");
+    expect(Select.mutableValue).toEqual("foo");
 
-    Select.vm.select({ label: "This is Bar", value: "bar" });
+    Select.select({ label: "This is Bar", value: "bar" });
     expect(Parent.vm.value).toEqual("bar");
   });
 

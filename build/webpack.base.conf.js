@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const chokidar = require('chokidar');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -19,7 +18,7 @@ module.exports = {
     publicPath: '/',
     filename: '[name].js',
   },
-  // devtool: env === 'production' ? 'source-map' : 'eval-source-map',
+  devtool: env === 'production' ? 'source-map' : 'eval-source-map',
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {
@@ -50,10 +49,6 @@ module.exports = {
           'sass-loader',
         ],
       },
-      {
-        test: /\.html$/,
-        loader: 'vue-html-loader',
-      },
     ],
   },
   plugins: [
@@ -65,17 +60,4 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
   ],
-  devServer: {
-    hot: true,
-    hotOnly: true,
-    inline: true,
-    port: 8080,
-    before (app, server) {
-      chokidar.watch([
-        './**/*.html',
-      ]).on('all', function () {
-        server.sockWrite(server.sockets, 'content-changed');
-      });
-    },
-  },
 };

@@ -1,81 +1,189 @@
 <template>
   <div id="app">
-    <v-select placeholder="default" :options="options"></v-select>
-    <v-select placeholder="default, RTL" :options="options" dir="rtl"></v-select>
-    <v-select placeholder="default, options=[1,5,10]" :options="[1,5,10]"></v-select>
-    <v-select placeholder="multiple" multiple :options="options"></v-select>
-    <v-select placeholder="multiple, taggable" multiple taggable :options="options" no-drop></v-select>
-    <v-select placeholder="multiple, taggable, push-tags" multiple push-tags taggable :options="[{label: 'Foo', value: 'foo'}]"></v-select>
-    <v-select placeholder="multiple, closeOnSelect=true" multiple :options="['cat', 'dog', 'bear']"></v-select>
-    <v-select placeholder="multiple, closeOnSelect=false" multiple :close-on-select="false" :options="['cat', 'dog', 'bear']"></v-select>
-    <v-select placeholder="searchable=false" :options="options" :searchable="false"></v-select>
-    <v-select placeholder="search github.." label="full_name" @search="search" :options="ajaxRes"></v-select>
-    <v-select placeholder="custom option template" :options="options" multiple>
-      <template slot="selected-option" slot-scope="option">
-        {{option.label}}
-      </template>
-      <template slot="option" slot-scope="option">
-        {{option.label}} ({{option.value}})
-      </template>
-    </v-select>
-    <v-select placeholder="custom option template for string array" taggable :options="['cat', 'dog', 'bear']" multiple>
-      <template slot="selected-option" slot-scope="option">
-        {{option.label}}
-      </template>
-      <template slot="option" slot-scope="option">
-        {{option.label}}
-      </template>
-    </v-select>
-    <v-select multiple placeholder="custom label template" :options="options">
-            <span
-                    slot="selected-option-container"
-                    slot-scope="props"
-                    class="selected-tag"
-            >
-                {{ props.option.label }} ({{ props.option.value }})
-              <button v-if="props.multiple" @click="props.deselect(props.option)" type="button" class="close" aria-label="Remove option">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </span>
-    </v-select>
-    <v-select placeholder="select on tab" :select-on-tab="true" :options="options"></v-select>
-    <v-select placeholder="disabled" disabled  value="disabled"></v-select>
-    <v-select placeholder="disabled multiple" disabled multiple :value="['disabled', 'multiple']"></v-select>
-    <v-select placeholder="filterable=false, @search=searchPeople" label="first_name" :filterable="false" @search="searchPeople" :options="people"></v-select>
-    <v-select placeholder="filtering with fuse.js" label="title" :options="fuseSearchOptions" :filter="fuseSearch">
-      <template slot="option" slot-scope="option">
-        <strong>{{ option.title }}</strong><br>
-        <em>{{ `${option.author.firstName} ${option.author.lastName}` }}</em>
-      </template>
-    </v-select>
+
+    <div id="config">
+      <div class="form-control">
+        <label for="multiple">
+          <input id="multiple" type="checkbox" v-model="configuration.multiple">
+          <code>multiple</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="disabled">
+          <input id="disabled" type="checkbox" v-model="configuration.disabled">
+          <code>disabled</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="rtl">
+          <input id="rtl" type="radio" v-model="configuration.dir" value="rtl">
+          <code>dir="rtl"</code>
+        </label>
+        <label for="ltr">
+          <input id="ltr" type="radio" v-model="configuration.dir" value="ltr">
+          <code>dir="ltr"</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="taggable">
+          <input id="taggable" type="checkbox" v-model="configuration.taggable">
+          <code>taggable</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="noDrop">
+          <input id="noDrop" type="checkbox" v-model="configuration.noDrop">
+          <code>no-drop</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="pushTags">
+          <input id="pushTags" type="checkbox" v-model="configuration.pushTags">
+          <code>push-tags</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="selectOnTab">
+          <input id="selectOnTab" type="checkbox" v-model="configuration.selectOnTab">
+          <code>select-on-tab</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="clearable">
+          <input id="clearable" type="checkbox" v-model="configuration.clearable">
+          <code>clearable</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="searchable">
+          <input id="searchable" type="checkbox" v-model="configuration.searchable">
+          <code>searchable</code>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <label for="closeOnSelect">
+          <input id="closeOnSelect" type="checkbox" v-model="configuration.closeOnSelect">
+          <code>close-on-select</code>
+        </label>
+      </div>
+    </div>
+
+    <div id="sandbox">
+
+      <div class="example">
+        <v-select v-bind="configuration" placeholder="country objects"></v-select>
+      </div>
+
+      <div class="example">
+        <v-select v-bind="configuration" placeholder="country objects, using option scoped slots">
+          <template slot="selected-option" slot-scope="{ label, value }">
+            {{ label }} -- {{ value }}
+          </template>
+          <template slot="option" slot-scope="{ label, value }">
+            {{ label }} ({{ value }})
+          </template>
+        </v-select>
+      </div>
+
+      <div class="example">
+        <v-select v-bind="configuration" :options="['cat', 'dog', 'bear']" placeholder="string options, option slots">
+          <template slot="selected-option" slot-scope="{ label }">
+            {{ label }}
+          </template>
+          <template slot="option" slot-scope="{ label }">
+            {{ label }}
+          </template>
+        </v-select>
+      </div>
+
+      <div class="example">
+        <v-select v-bind="configuration" options="[1,5,10]" placeholder="options=[1,5,10]"></v-select>
+      </div>
+
+      <div class="example">
+        <v-select v-bind="configuration" label="title" :options="optionDataSets.books" :filter="fuseSearch" placeholder="advanced filtering w/ fuse.js + scoped slots">
+          <template slot="option" slot-scope="option">
+            <strong>{{ option.title }}</strong><br>
+            <em>{{ `${option.author.firstName} ${option.author.lastName}` }}</em>
+          </template>
+        </v-select>
+      </div>
+
+      <div class="example">
+        <v-select v-bind="configuration" :options="[]" placeholder=":options=[]"></v-select>
+      </div>
+    </div>
+
+
+    <!--<v-select placeholder="search github.." label="full_name" @search="search" :options="ajaxRes"></v-select>-->
+
+
+    <!--<v-select multiple placeholder="custom label template" :options="options">-->
+    <!--<span-->
+    <!--slot="selected-option-container"-->
+    <!--slot-scope="props"-->
+    <!--class="selected-tag"-->
+    <!--&gt;-->
+    <!--{{ props.option.label }} ({{ props.option.value }})-->
+    <!--<button v-if="props.multiple" @click="props.deselect(props.option)" type="button" class="close" aria-label="Remove option">-->
+    <!--<span aria-hidden="true">&times;</span>-->
+    <!--</button>-->
+    <!--</span>-->
+    <!--</v-select>-->
+    <!--<v-select placeholder="filterable=false, @search=searchPeople" label="first_name" :filterable="false" @search="searchPeople" :options="people"></v-select>-->
   </div>
 </template>
 
 <script>
-import Fuse from "fuse.js";
-import debounce from "lodash/debounce";
-import vSelect from "../src/components/Select.vue";
-import countries from "./data/countryCodes";
-import fuseSearchOptions from "./data/books";
+import Fuse from 'fuse.js';
+import debounce from 'lodash/debounce';
+import vSelect from '../src/components/Select.vue';
+import countries from './data/countryCodes';
+import books from './data/books';
+
+const defaultConfig = () => ({
+  options: countries,
+  multiple: false,
+  dir: 'ltr',
+  clearable: true,
+  searchable: true,
+  noDrop: false,
+  closeOnSelect: true,
+  disabled: false,
+  selectOntab: false,
+  placeholder: 'placeholder',
+});
 
 export default {
-  components: { vSelect },
-  data() {
+  components: {vSelect},
+  data () {
     return {
-      placeholder: "placeholder",
+      configuration: defaultConfig(),
       value: null,
-      options: countries,
       ajaxRes: [],
       people: [],
-      fuseSearchOptions
+      optionDataSet: 'countries',
+      optionDataSets: {
+        countries,
+        books,
+      },
     };
   },
   methods: {
-    search(search, loading) {
+    search (search, loading) {
       loading(true);
       this.getRepositories(search, loading, this);
     },
-    searchPeople(search, loading) {
+    searchPeople (search, loading) {
       loading(true);
       this.getPeople(loading, this);
     },
@@ -93,38 +201,63 @@ export default {
           loading(false);
         });
     }, 250),
-    fuseSearch(options, search) {
+    fuseSearch (options, search) {
       return new Fuse(options, {
-        keys: ["title", "author.firstName", "author.lastName"]
+        keys: ['title', 'author.firstName', 'author.lastName'],
       }).search(search);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
-/*@import "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css";*/
-/*@import "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css";*/
-/*@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";*/
-/*@import "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css";*/
+  /*@import "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css";*/
+  /*@import "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css";*/
+  /*@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";*/
+  /*@import "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css";*/
 
-body,
-html {
-  font-family: -apple-system, sans-serif;
-}
+  body,
+  html {
+    margin: 0;
+    height: 100%;
+    font-family: -apple-system, sans-serif;
+  }
 
-#app {
-  height: 95vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-content: center;
-}
+  #app {
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 100%;
+  }
 
-.v-select {
-  width: 25em;
-  margin: 1em;
-}
+  #config {
+    border-right: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #sandbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-control {
+    margin-bottom: 1rem;
+    padding: 1rem 1rem 0;
+  }
+
+  .form-control:not(:first-child) {
+    border-top: 1px solid #d9d9d9;
+  }
+
+  .example {
+    margin-bottom: 2rem;
+  }
+
+  .v-select {
+    width: 25em;
+  }
 </style>

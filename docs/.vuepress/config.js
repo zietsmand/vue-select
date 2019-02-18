@@ -50,6 +50,10 @@ module.exports = {
     repo: 'sagalbot/vue-select',
     editLinks: true,
     docsDir: 'docs',
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Sandbox', link: '/sandbox' }
+    ],
     sidebar: {
       '/': [
         {
@@ -78,10 +82,11 @@ module.exports = {
           children: [
             ['api/props', 'Props'],
             ['api/slots', 'Slots'],
-            ['api/events', 'Events']
+            ['api/events', 'Events'],
           ],
         },
       ],
+      '/sandbox': false,
     },
   },
 

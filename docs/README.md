@@ -14,17 +14,21 @@ template that fits the 80% use case for a select dropdown. Here it is by default
 
 <div style="max-width:50%; margin: 0 auto; padding: 1rem 0;">
   <v-select :options="['Option One','Option Two','Option Three']" />
-</div> 
+</div>
+
+If you want to get a quick sense of what vue-select can do, check out
+[the sandbox](sandbox.md). 
 
 #### Features
-- AJAX Support
 - Tagging
-- List Filtering/Searching
-- Supports Vuex
+- Filtering/Searching
+- Vuex Support
+- AJAX Support
+- SSR Support
 - Select Single/Multiple Options
 - Tested with Bootstrap 3/4, Bulma, Foundation
 - +95% Test Coverage
-- ~33kb minified with CSS
+- ~20kb Total / ~5kb CSS / ~15kb JS
 - Zero dependencies
 
 #### Resources

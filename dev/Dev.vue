@@ -1,130 +1,35 @@
 <template>
   <div id="app">
-    <v-select placeholder="default" :options="options"></v-select>
-    <v-select placeholder="default, RTL" :options="options" dir="rtl"></v-select>
-    <v-select placeholder="default, options=[1,5,10]" :options="[1,5,10]"></v-select>
-    <v-select placeholder="multiple" multiple :options="options"></v-select>
-    <v-select placeholder="multiple, taggable" multiple taggable :options="options" no-drop></v-select>
-    <v-select placeholder="multiple, taggable, push-tags" multiple push-tags taggable :options="[{label: 'Foo', value: 'foo'}]"></v-select>
-    <v-select placeholder="multiple, closeOnSelect=true" multiple :options="['cat', 'dog', 'bear']"></v-select>
-    <v-select placeholder="multiple, closeOnSelect=false" multiple :close-on-select="false" :options="['cat', 'dog', 'bear']"></v-select>
-    <v-select placeholder="searchable=false" :options="options" :searchable="false"></v-select>
-    <v-select placeholder="search github.." label="full_name" @search="search" :options="ajaxRes"></v-select>
-    <v-select placeholder="custom option template" :options="options" multiple>
-      <template slot="selected-option" slot-scope="option">
-        {{option.label}}
+    <sandbox hide-help>
+      <template slot-scope="config">
+
+      <v-select v-bind="config" />
+
       </template>
-      <template slot="option" slot-scope="option">
-        {{option.label}} ({{option.value}})
-      </template>
-    </v-select>
-    <v-select placeholder="custom option template for string array" taggable :options="['cat', 'dog', 'bear']" multiple>
-      <template slot="selected-option" slot-scope="option">
-        {{option.label}}
-      </template>
-      <template slot="option" slot-scope="option">
-        {{option.label}}
-      </template>
-    </v-select>
-    <v-select multiple placeholder="custom label template" :options="options">
-            <span
-                    slot="selected-option-container"
-                    slot-scope="props"
-                    class="selected-tag"
-            >
-                {{ props.option.label }} ({{ props.option.value }})
-              <button v-if="props.multiple" @click="props.deselect(props.option)" type="button" class="close" aria-label="Remove option">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </span>
-    </v-select>
-    <v-select placeholder="select on tab" :select-on-tab="true" :options="options"></v-select>
-    <v-select placeholder="disabled" disabled  value="disabled"></v-select>
-    <v-select placeholder="disabled multiple" disabled multiple :value="['disabled', 'multiple']"></v-select>
-    <v-select placeholder="filterable=false, @search=searchPeople" label="first_name" :filterable="false" @search="searchPeople" :options="people"></v-select>
-    <v-select placeholder="filtering with fuse.js" label="title" :options="fuseSearchOptions" :filter="fuseSearch">
-      <template slot="option" slot-scope="option">
-        <strong>{{ option.title }}</strong><br>
-        <em>{{ `${option.author.firstName} ${option.author.lastName}` }}</em>
-      </template>
-    </v-select>
+    </sandbox>
   </div>
 </template>
 
 <script>
-import Fuse from "fuse.js";
-import debounce from "lodash/debounce";
-import vSelect from "../src/components/Select.vue";
-import countries from "./data/countryCodes";
-import fuseSearchOptions from "./data/books";
+import vSelect from '../src/components/Select';
+import Sandbox from '../docs/.vuepress/components/Sandbox';
+// import countries from '../docs/.vuepress/data/countryCodes';
+// import books from '../docs/.vuepress/data/books';
 
 export default {
-  components: { vSelect },
-  data() {
-    return {
-      placeholder: "placeholder",
-      value: null,
-      options: countries,
-      ajaxRes: [],
-      people: [],
-      fuseSearchOptions
-    };
-  },
-  methods: {
-    search(search, loading) {
-      loading(true);
-      this.getRepositories(search, loading, this);
-    },
-    searchPeople(search, loading) {
-      loading(true);
-      this.getPeople(loading, this);
-    },
-    getPeople: debounce((loading, vm) => {
-      vm.$http.get(`https://reqres.in/api/users?per_page=10`).then(res => {
-        vm.people = res.data.data;
-        loading(false);
-      });
-    }, 250),
-    getRepositories: debounce((search, loading, vm) => {
-      vm.$http
-        .get(`https://api.github.com/search/repositories?q=${search}`)
-        .then(res => {
-          vm.ajaxRes = res.data.items;
-          loading(false);
-        });
-    }, 250),
-    fuseSearch(options, search) {
-      return new Fuse(options, {
-        keys: ["title", "author.firstName", "author.lastName"]
-      }).search(search);
-    }
-  }
+  components: {Sandbox, vSelect},
 };
 </script>
 
 <style>
-/*@import "https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css";*/
-/*@import "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css";*/
-/*@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";*/
-/*@import "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css";*/
+  html,
+  body {
+    margin: 0;
+    height: 100%;
+    font-family: -apple-system, sans-serif;
+  }
 
-body,
-html {
-  font-family: -apple-system, sans-serif;
-}
-
-#app {
-  height: 95vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-content: center;
-}
-
-.v-select {
-  width: 25em;
-  margin: 1em;
-}
+  #app {
+    height: 100%;
+  }
 </style>

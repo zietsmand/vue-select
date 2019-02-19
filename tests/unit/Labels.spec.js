@@ -9,7 +9,7 @@ describe("Labels", () => {
       label: "name",
       value: { name: "Foo" }
     });
-    expect(Select.find(".selected-tag").text()).toBe("Foo");
+    expect(Select.find(".vs__selected").text()).toBe("Foo");
   });
 
   it("will console.warn when options contain objects without a valid label key", () => {

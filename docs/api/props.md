@@ -50,6 +50,11 @@ clearable: {
 
 ## maxHeight
 
+::: warning Deprecated in `v2.x` & Removed in `v3.0`
+This prop was removed in `v3.0`. You can use the `$vs-dropdown-max-height`
+SCSS variable to adjust this setting in `v3.x`.
+:::
+
 Sets the max-height property on the dropdown list.
 
 ```js

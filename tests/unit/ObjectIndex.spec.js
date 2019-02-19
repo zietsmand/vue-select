@@ -137,7 +137,7 @@ describe("When index prop is defined", () => {
       }
     });
 
-    expect(Select.find(".selected-tag").text()).toContain("Baz");
+    expect(Select.find(".vs__selected").text()).toContain("Baz");
   });
 
   it("will console.warn when attempting to select an option with an undefined index", () => {

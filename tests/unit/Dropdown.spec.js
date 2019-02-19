@@ -23,7 +23,7 @@ describe("Toggling Dropdown", () => {
       options: [{ label: "one" }]
     });
 
-    const selectedTag = Select.find(".selected-tag").element;
+    const selectedTag = Select.find(".vs__selected").element;
 
     Select.vm.toggleDropdown({ target: selectedTag });
     expect(Select.vm.open).toEqual(true);
@@ -127,9 +127,9 @@ describe("Toggling Dropdown", () => {
   it("should have an open class when dropdown is active", () => {
     const Select = selectWithProps();
 
-    expect(Select.vm.dropdownClasses.open).toEqual(false);
+    expect(Select.vm.stateClasses['vs--open']).toEqual(false);
 
     Select.vm.open = true;
-    expect(Select.vm.dropdownClasses.open).toEqual(true);
+    expect(Select.vm.stateClasses['vs--open']).toEqual(true);
   });
 });

@@ -6,7 +6,7 @@ The most common use case for `vue-select` is to have the chosen value synced wit
 <v-select v-model="selected"></v-select>
 ```
 
-<CodePen url="Kqxbjw" height="25"/>
+<CodePen url="Kqxbjw" height="250"/>
 
 If you don't require the `value` to be synced, you can also pass the prop directly:
 
@@ -31,13 +31,9 @@ By default, `vue-select` supports choosing a single value. If you need multiple 
 To allow input that's not present within the options, set the `taggable` prop to true.
 If you want new tags to be pushed to the options list, set `push-tags` to true.
 
-```html
-<v-select taggable></v-select>
-```
+<CodePen url="XVoWxm" height="350"/>
 
 ## Return a Single Key from an Object
-
-<CodePen url="XVoWxm" height="350"/>
 
 When the `options` array contains objects, `vue-select` returns the whole object as dropdown value upon selection. You can specify your own `index` prop to return only the value contained in the specific property.
 

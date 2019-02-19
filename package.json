@@ -8,10 +8,11 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack-dev-server --config build/webpack.dev.conf.js --hot --progress -d",
-    "dev:docs": "vuepress dev docs",
+    "serve": "webpack-dev-server --config build/webpack.dev.conf.js --hot --progress -d",
+    "serve:docs": "vuepress dev docs",
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js --progress",
     "build:docs": "vuepress build docs",
+    "build:preview": "cross-env DEPLOY_PREVIEW=true vuepress build --debug docs",
     "test": "jest"
   },
   "repository": {

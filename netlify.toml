@@ -6,3 +6,9 @@
 [build]
   publish = "docs/.vuepress/dist"
   command = "yarn build:docs"
+
+# Deploy Preview context: all deploys resulting from a pull/merge request will
+# inherit these settings.
+[context.deploy-preview]
+  publish = "docs/.vuepress/dist"
+  command = "yarn build:docs"

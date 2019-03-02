@@ -555,14 +555,9 @@
        */
       deselect(option) {
         if (this.multiple) {
-          let ref = -1
-          this.mutableValue.forEach((val) => {
-            if (val === option || (this.index && val === option[this.index]) || (typeof val === 'object' && val[this.label] === option[this.label])) {
-              ref = val
-            }
-          })
-          var index = this.mutableValue.indexOf(ref)
-          this.mutableValue.splice(index, 1)
+          this.mutableValue = this.mutableValue.filter(val => {
+            return ! (val === option || (this.index && val === option[this.index]) || (typeof val === 'object' && val[this.label] === option[this.label]));
+          });
         } else {
           this.mutableValue = null
         }

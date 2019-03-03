@@ -34,13 +34,15 @@
           :disabled="disabled"
           @click="clearSelection"
           type="button"
-          class="vs__clear"
+          class="vs__clear vs__btn-reset"
           title="Clear selection"
         >
           <deselect />
         </button>
 
-        <open-indicator v-if="!noDrop" ref="openIndicator" role="presentation" class="vs__open-indicator" />
+        <button v-if="!noDrop" ref="openIndicator" role="presentation" class="vs__open-indicator vs__btn-reset">
+          <open-indicator />
+        </button>
 
         <slot name="spinner" v-bind="scope.spinner">
           <div class="vs__spinner" v-show="mutableLoading">Loading...</div>
@@ -591,19 +593,30 @@
 
       /**
        * Toggle the visibility of the dropdown menu.
-       * @param  {Event} e
+       * @param  {MouseEvent} e
        * @return {void}
        */
-      toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.searchEl || e.target === this.$refs.toggle ||
-            e.target.classList.contains('vs__selected') || e.target === this.$el) {
+      toggleDropdown (e) {
+        if (this.disabled) {
+          return;
+        }
+
+        const target = e.target;
+
+        const toggleableElements = [
+          this.$refs.openIndicator,
+          this.$refs.toggle,
+          this.searchEl,
+          this.$el,
+        ];
+
+        if (toggleableElements.includes(target) || target.classList.contains('vs__selected') ) {
           if (this.open) {
-            this.searchEl.blur() // dropdown will close on blur
+            // dropdown will close on blur
+            this.searchEl.blur();
           } else {
-            if (!this.disabled) {
-              this.open = true
-              this.searchEl.focus()
-            }
+            this.open = true;
+            this.searchEl.focus();
           }
         }
       },

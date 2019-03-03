@@ -7,7 +7,7 @@
   "main": "dist/vue-select.js",
   "license": "MIT",
   "scripts": {
-    "start": "npm run dev",
+    "start": "npm run serve",
     "serve": "webpack-dev-server --config build/webpack.dev.conf.js --hot --progress -d",
     "serve:docs": "vuepress dev docs",
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js --progress",

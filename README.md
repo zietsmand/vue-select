@@ -1,8 +1,6 @@
 # vue-select [![Build Status](https://travis-ci.org/sagalbot/vue-select.svg?branch=master)](https://travis-ci.org/sagalbot/vue-select) ![MIT License](https://img.shields.io/github/license/sagalbot/vue-select.svg?style=flat-square) ![Current Release](https://img.shields.io/github/release/sagalbot/vue-select.svg?style=flat-square)
 
-> A native Vue.js select component that provides similar functionality to Select2 without the overhead of jQuery.
-
-Want to help out as a primary contributor? [Get in touch](https://github.com/sagalbot/vue-select/issues/581)!
+Everything you wish the native <select> element could do, wrapped up into a zero dependency, highly extensible Vue component.
 
 #### Features
 - AJAX Support

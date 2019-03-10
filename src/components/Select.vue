@@ -34,13 +34,13 @@
           :disabled="disabled"
           @click="clearSelection"
           type="button"
-          class="vs__clear vs__btn-reset"
+          class="vs__clear vs__btn"
           title="Clear selection"
         >
           <deselect />
         </button>
 
-        <button v-if="!noDrop" ref="openIndicator" role="presentation" class="vs__open-indicator vs__btn-reset">
+        <button v-if="!noDrop" ref="openIndicator" role="presentation" class="vs__btn vs__open-indicator">
           <open-indicator />
         </button>
 

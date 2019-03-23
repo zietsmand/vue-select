@@ -179,7 +179,7 @@ const defaultConfig = () => ({
   closeOnSelect: true,
   disabled: false,
   selectOntab: false,
-  placeholder: 'placeholder',
+  placeholder: 'Select a Country...',
 });
 
 export default {

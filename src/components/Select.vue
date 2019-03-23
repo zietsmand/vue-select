@@ -49,7 +49,7 @@
     </div>
 
     <transition :name="transition">
-      <ul ref="dropdownMenu" v-if="dropdownOpen" class="vs__dropdown-menu" role="listbox" @mousedown="onMousedown">
+      <ul ref="dropdownMenu" v-if="dropdownOpen" class="vs__dropdown-menu" role="listbox" @mousedown="onMousedown" @mouseup="onMouseUp">
         <li
           role="option"
           v-for="(option, index) in filteredOptions"
@@ -718,10 +718,20 @@
        * firing a `blur` event when clicking
        * the dropdown's scrollbar, causing it
        * to collapse abruptly.
+       * @see https://github.com/sagalbot/vue-select/issues/106
        * @return {void}
        */
       onMousedown() {
         this.mousedown = true
+      },
+
+      /**
+       * Event-Handler to help workaround IE11 (probably fixes 10 as well)
+       * @see https://github.com/sagalbot/vue-select/issues/106
+       * @return {void}
+       */
+      onMouseUp() {
+        this.mousedown = false
       },
 
       /**

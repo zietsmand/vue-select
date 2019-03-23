@@ -9,12 +9,12 @@
       <div class="vs__selected-options" ref="selectedOptions">
         <slot v-for="option in selectedValue"
               name="selected-option-container"
-              :option="(typeof option === 'object')?option:{[label]: option}"
+              :option="normalizeOptionForSlot(option)"
               :deselect="deselect"
               :multiple="multiple"
               :disabled="disabled">
           <span class="vs__selected" v-bind:key="option.index">
-            <slot name="selected-option" v-bind="(typeof option === 'object')?option:{[label]: option}">
+            <slot name="selected-option" v-bind="normalizeOptionForSlot(option)">
               {{ getOptionLabel(option) }}
             </slot>
             <button v-if="multiple" :disabled="disabled" @click="deselect(option)" type="button" class="vs__deselect" aria-label="Deselect option">
@@ -55,11 +55,11 @@
           v-for="(option, index) in filteredOptions"
           :key="index"
           class="vs__dropdown-option"
-          :class="{ active: isOptionSelected(option), 'vs__dropdown-option--highlight': index === typeAheadPointer }"
+          :class="{ 'vs__dropdown-option--selected': isOptionSelected(option), 'vs__dropdown-option--highlight': index === typeAheadPointer }"
           @mouseover="typeAheadPointer = index"
           @mousedown.prevent.stop="select(option)"
         >
-          <slot name="option" v-bind="(typeof option === 'object')?option:{[label]: option}">
+          <slot name="option" v-bind="normalizeOptionForSlot(option)">
             {{ getOptionLabel(option) }}
           </slot>
         </li>
@@ -698,6 +698,16 @@
           }
           return false
         })
+      },
+
+      /**
+       * Ensures that options are always
+       * passed as objects to scoped slots.
+       * @param option
+       * @return {*}
+       */
+      normalizeOptionForSlot (option) {
+        return (typeof option === 'object') ? option : {[this.label]: option};
       },
 
       /**

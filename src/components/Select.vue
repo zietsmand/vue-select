@@ -7,7 +7,7 @@
     <div ref="toggle" @mousedown.prevent="toggleDropdown" class="vs__dropdown-toggle">
 
       <div class="vs__selected-options" ref="selectedOptions">
-        <slot v-for="option in valueAsArray"
+        <slot v-for="option in selectedValue"
               name="selected-option-container"
               :option="(typeof option === 'object')?option:{[label]: option}"
               :deselect="deselect"
@@ -90,9 +90,7 @@
        * using 'change' event using v-on
        * @type {Object||String||null}
        */
-      value: {
-        default: null
-      },
+      value: {},
 
       /**
        * An array of strings or objects to be used as dropdown choices.
@@ -191,7 +189,6 @@
         default: 'label'
       },
 
-
       /**
        * Value of the 'autocomplete' field of the input
        * element.
@@ -243,27 +240,6 @@
             return option[this.label]
           }
           return option;
-        }
-      },
-
-      /**
-       * An optional callback function that is called each time the selected
-       * value(s) change. When integrating with Vuex, use this callback to trigger
-       * an action, rather than using :value.sync to retreive the selected value.
-       * @type {Function}
-       * @param {Object || String} val
-       */
-      onChange: {
-        type: Function,
-        default: function (val) {
-          this.$emit('change', val);
-        }
-      },
-
-      onInput: {
-        type: Function,
-        default: function (val) {
-          this.$emit('input', val);
         }
       },
 
@@ -366,9 +342,10 @@
       createOption: {
         type: Function,
         default(newOption) {
-          if (typeof this.mutableOptions[0] === 'object') {
+          if (typeof this.optionList[0] === 'object') {
             newOption = {[this.label]: newOption}
           }
+
           this.$emit('option:created', newOption)
           return newOption
         }
@@ -440,65 +417,31 @@
       return {
         search: '',
         open: false,
-        mutableValue: null,
-        mutableOptions: []
+        pushedTags: [],
+        _value: [] // Internal value managed by Vue Select if no `value` prop is passed
       }
     },
 
     watch: {
       /**
-       * When the value prop changes, update
-       * the internal mutableValue.
-       * @param  {mixed} val
-       * @return {void}
-       */
-      value(val) {
-        this.mutableValue = val
-      },
-
-      /**
-       * Maybe run the onChange callback.
-       * @param  {string|object} val
-       * @param  {string|object} old
-       * @return {void}
-       */
-      mutableValue(val, old) {
-        if (this.multiple) {
-          this.onChange ? this.onChange(val) : null
-        } else {
-          this.onChange && val !== old ? this.onChange(val) : null
-        }
-      },
-
-      /**
-       * When options change, update
-       * the internal mutableOptions.
-       * @param  {array} val
-       * @return {void}
-       */
-      options(val) {
-        this.mutableOptions = val
-      },
-
-      /**
-       * Maybe reset the mutableValue
-       * when mutableOptions change.
+       * Maybe reset the value
+       * when options change.
        * @return {[type]} [description]
        */
-      mutableOptions() {
+      options(val) {
         if (!this.taggable && this.resetOnOptionsChange) {
-          this.mutableValue = this.multiple ? [] : null
+          this.clearSelection()
         }
       },
 
       /**
-       * Always reset the mutableValue when
+       * Always reset the value when
        * the multiple prop changes.
-       * @param  {Boolean} val
+       * @param  {Boolean} isMultiple
        * @return {void}
        */
-      multiple(val) {
-        this.mutableValue = val ? [] : null
+      multiple() {
+        this.clearSelection()
       },
     },
 
@@ -507,8 +450,6 @@
      * attach any event listeners.
      */
     created() {
-      this.mutableValue = this.value
-      this.mutableOptions = this.options.slice(0)
       this.mutableLoading = this.loading
 
       this.$on('option:created', this.maybePushTag)
@@ -526,7 +467,8 @@
           if (this.taggable && !this.optionExists(option)) {
             option = this.createOption(option)
           }
-          if(this.index) {
+
+          if (this.index) {
             if (!option.hasOwnProperty(this.index)) {
               return console.warn(
                   `[vue-select warn]: Index key "option.${this.index}" does not` +
@@ -535,14 +477,11 @@
             }
             option = option[this.index]
           }
-          if (this.multiple && !this.mutableValue) {
-            this.mutableValue = [option]
-          } else if (this.multiple) {
-            this.mutableValue.push(option)
-          } else {
-            this.mutableValue = option
+
+          if (this.multiple) {
+            option = this.selectedValue.concat(option)
           }
-          this.onInput(this.mutableValue);
+          this.updateValue(option);
         }
 
         this.onAfterSelect(option)
@@ -554,14 +493,14 @@
        * @return {void}
        */
       deselect(option) {
+        let value = null
+
         if (this.multiple) {
-          this.mutableValue = this.mutableValue.filter(val => {
-            return ! (val === option || (this.index && val === option[this.index]) || (typeof val === 'object' && val[this.label] === option[this.label]));
+          value = this.selectedValue.filter(val => {
+            return ! this.optionComparator(val, option)
           });
-        } else {
-          this.mutableValue = null
         }
-        this.onInput(this.mutableValue);
+        this.updateValue(value);
       },
 
       /**
@@ -569,8 +508,7 @@
        * @return {void}
        */
       clearSelection() {
-        this.mutableValue = this.multiple ? [] : null
-        this.onInput(this.mutableValue)
+        this.updateValue(this.multiple ? [] : null)
       },
 
       /**
@@ -587,6 +525,14 @@
         if (this.clearSearchOnSelect) {
           this.search = ''
         }
+      },
+
+      updateValue(value) {
+        if (typeof this.value === 'undefined') {
+          // Vue select has to manage value
+          this.$data._value = value;
+        }
+        this.$emit('input', value);
       },
 
       /**
@@ -614,11 +560,8 @@
        * @return {Boolean}        True when selected | False otherwise
        */
       isOptionSelected(option) {
-        return this.valueAsArray.some(value => {
-          if (typeof value === 'object') {
-            return this.optionObjectComparator(value, option)
-          }
-          return value === option || value === option[this.index]
+        return this.selectedValue.some(value => {
+          return this.optionComparator(value, option)
         })
       },
 
@@ -629,14 +572,26 @@
        * @param option {Object}
        * @returns {boolean}
        */
-      optionObjectComparator(value, option) {
-        if (this.index && value === option[this.index]) {
-          return true
-        } else if ((value[this.label] === option[this.label]) || (value[this.label] === option)) {
-          return true
-        } else if (this.index && value[this.index] === option[this.index]) {
-          return true
+      optionComparator(value, option) {
+        // This method will need to be cleaned/replaced when the `reducer` API is added
+        if (typeof value !== 'object' && typeof option !== 'object') {
+          // Comparing primitives
+          if (value === option) {
+            return true
+          }
+        } else {
+          // Comparing objects
+          if (this.index && value === option[this.index]) {
+            return true
+          }
+          if ((value[this.label] === option[this.label]) || (value[this.label] === option)) {
+            return true
+          }
+          if (this.index && value[this.index] === option[this.index]) {
+            return true
+          }
         }
+
         return false;
       },
 
@@ -686,7 +641,7 @@
           return
         }
         // Fixed bug where no-options message could not be closed
-        if(this.search.length === 0 && this.options.length === 0){
+        if (this.search.length === 0 && this.options.length === 0){
           this.closeSearchOptions()
           return
         }
@@ -718,42 +673,43 @@
        * @return {this.value}
        */
       maybeDeleteValue() {
-        if (!this.searchEl.value.length && this.mutableValue && this.clearable) {
-          return this.multiple ? this.mutableValue.pop() : this.mutableValue = null
+        if (!this.searchEl.value.length && this.selectedValue && this.clearable) {
+          let value = null;
+          if (this.multiple) {
+            value = [...this.selectedValue.slice(0, this.selectedValue.length - 1)]
+          }
+          this.updateValue(value)
         }
       },
 
       /**
        * Determine if an option exists
-       * within this.mutableOptions array.
+       * within this.optionList array.
        *
        * @param  {Object || String} option
        * @return {boolean}
        */
       optionExists(option) {
-        let exists = false
-
-        this.mutableOptions.forEach(opt => {
+        return this.optionList.some(opt => {
           if (typeof opt === 'object' && opt[this.label] === option) {
-            exists = true
+            return true
           } else if (opt === option) {
-            exists = true
+            return true
           }
+          return false
         })
-
-        return exists
       },
 
       /**
        * If push-tags is true, push the
-       * given option to mutableOptions.
+       * given option to `this.pushedTags`.
        *
        * @param  {Object || String} option
        * @return {void}
        */
       maybePushTag(option) {
         if (this.pushTags) {
-          this.mutableOptions.push(option)
+          this.pushedTags.push(option)
         }
       },
 
@@ -812,6 +768,25 @@
 
     computed: {
 
+      selectedValue () {
+        let value = this.value;
+
+        if (typeof this.value === 'undefined') {
+          // Vue select has to manage value internally
+          value = this.$data._value;
+        }
+
+        if (value) {
+          return [].concat(value);
+        }
+
+        return [];
+      },
+
+      optionList () {
+        return this.options.concat(this.pushedTags);
+      },
+
       /**
        * Find the search input DOM element.
        * @returns {HTMLInputElement}
@@ -848,7 +823,7 @@
               'keyup': this.onSearchKeyUp,
               'blur': this.onSearchBlur,
               'focus': this.onSearchFocus,
-              'input': (e) => this.search = e.target.value,
+              'input': (e) => this.search = e.target.value
             },
           },
           spinner: {
@@ -919,10 +894,13 @@
        * @return {array}
        */
       filteredOptions() {
+        const optionList = [].concat(this.optionList);
+
         if (!this.filterable && !this.taggable) {
-          return this.mutableOptions.slice()
+          return optionList;
         }
-        let options = this.search.length ? this.filter(this.mutableOptions, this.search, this) : this.mutableOptions;
+
+        let options = this.search.length ? this.filter(optionList, this.search, this) : optionList;
         if (this.taggable && this.search.length && !this.optionExists(this.search)) {
           options.unshift(this.search)
         }
@@ -934,28 +912,7 @@
        * @return {Boolean}
        */
       isValueEmpty() {
-        if (this.mutableValue) {
-          if (typeof this.mutableValue === 'object') {
-            return ! Object.keys(this.mutableValue).length
-          }
-          return ! this.valueAsArray.length
-        }
-
-        return true;
-      },
-
-      /**
-       * Return the current value in array format.
-       * @return {Array}
-       */
-      valueAsArray() {
-        if (this.multiple && this.mutableValue) {
-          return this.mutableValue
-        } else if (this.mutableValue) {
-          return [].concat(this.mutableValue)
-        }
-
-        return []
+        return this.selectedValue.length === 0;
       },
 
       /**
@@ -963,7 +920,7 @@
        * @return {Boolean}
        */
       showClearButton() {
-        return !this.multiple && this.clearable && !this.open && this.mutableValue != null
+        return !this.multiple && this.clearable && !this.open && !this.isValueEmpty
       }
     },
 

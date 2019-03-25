@@ -200,13 +200,15 @@
       },
 
       /**
-       * Tells vue-select what key to use when generating option
-       * values when each `option` is an object.
-       * @type {String}
+       * When working with objects, the reduce
+       * prop allows you to transform a given
+       * object to only the information you
+       * want passed to a v-model binding
+       * or @input event.
        */
-      index: {
-        type: String,
-        default: null
+      reduce: {
+        type: Function,
+        default: option => option,
       },
 
       /**
@@ -225,10 +227,6 @@
       getOptionLabel: {
         type: Function,
         default(option) {
-          if( this.index ) {
-            option = this.findOptionByIndexValue(option)
-          }
-
           if (typeof option === 'object') {
             if (!option.hasOwnProperty(this.label)) {
               return console.warn(
@@ -450,7 +448,15 @@
      * attach any event listeners.
      */
     created() {
-      this.mutableLoading = this.loading
+      this.mutableLoading = this.loading;
+
+      if (this.$options.propsData.hasOwnProperty('reduce') && this.value) {
+        if (Array.isArray(this.value)) {
+          this.$data._value = this.value.map(value => this.findOptionFromReducedValue(value));
+        } else {
+          this.$data._value = this.findOptionFromReducedValue(this.value);
+        }
+      }
 
       this.$on('option:created', this.maybePushTag)
     },
@@ -467,17 +473,6 @@
           if (this.taggable && !this.optionExists(option)) {
             option = this.createOption(option)
           }
-
-          if (this.index) {
-            if (!option.hasOwnProperty(this.index)) {
-              return console.warn(
-                  `[vue-select warn]: Index key "option.${this.index}" does not` +
-                  ` exist in options object ${JSON.stringify(option)}.`
-              )
-            }
-            option = option[this.index]
-          }
-
           if (this.multiple) {
             option = this.selectedValue.concat(option)
           }
@@ -492,15 +487,10 @@
        * @param  {Object|String} option
        * @return {void}
        */
-      deselect(option) {
-        let value = null
-
-        if (this.multiple) {
-          value = this.selectedValue.filter(val => {
-            return ! this.optionComparator(val, option)
-          });
-        }
-        this.updateValue(value);
+      deselect (option) {
+        this.updateValue(this.selectedValue.filter(val => {
+          return !this.optionComparator(val, option);
+        }));
       },
 
       /**
@@ -527,11 +517,28 @@
         }
       },
 
-      updateValue(value) {
-        if (typeof this.value === 'undefined') {
+      /**
+       * Accepts a selected value, updates local
+       * state when required, and triggers the
+       * input event.
+       *
+       * @emits input
+       * @param value
+       */
+      updateValue (value) {
+        if (this.isTrackingValues) {
           // Vue select has to manage value
           this.$data._value = value;
         }
+
+        if (value !== null) {
+          if (Array.isArray(value)) {
+            value = value.map(val => this.reduce(val));
+          } else {
+            value = this.reduce(value);
+          }
+        }
+
         this.$emit('input', value);
       },
 
@@ -573,7 +580,6 @@
        * @returns {boolean}
        */
       optionComparator(value, option) {
-        // This method will need to be cleaned/replaced when the `reducer` API is added
         if (typeof value !== 'object' && typeof option !== 'object') {
           // Comparing primitives
           if (value === option) {
@@ -581,13 +587,13 @@
           }
         } else {
           // Comparing objects
-          if (this.index && value === option[this.index]) {
+          if (value === this.reduce(option)) {
             return true
           }
-          if ((value[this.label] === option[this.label]) || (value[this.label] === option)) {
+          if ((this.getOptionLabel(value) === this.getOptionLabel(option)) || (this.getOptionLabel(value) === option)) {
             return true
           }
-          if (this.index && value[this.index] === option[this.index]) {
+          if (this.reduce(value) === this.reduce(option)) {
             return true
           }
         }
@@ -597,19 +603,80 @@
 
       /**
        * Finds an option from this.options
-       * where option[this.index] matches
+       * where a reduced value matches
        * the passed in value.
        *
        * @param value {Object}
        * @returns {*}
        */
-      findOptionByIndexValue(value) {
-        this.options.forEach(_option => {
-          if (JSON.stringify(_option[this.index]) === JSON.stringify(value)) {
-            value = _option
+      findOptionFromReducedValue (value) {
+        return this.options.find(option => JSON.stringify(this.reduce(option)) === JSON.stringify(value)) || value;
+      },
+
+      /**
+       * 'Private' function to close the search options
+       * @emits  {search:blur}
+       * @returns {void}
+       */
+      closeSearchOptions(){
+        this.open = false
+        this.$emit('search:blur')
+      },
+
+      /**
+       * Delete the value on Delete keypress when there is no
+       * text in the search input, & there's tags to delete
+       * @return {this.value}
+       */
+      maybeDeleteValue() {
+        if (!this.searchEl.value.length && this.selectedValue && this.clearable) {
+          let value = null;
+          if (this.multiple) {
+            value = [...this.selectedValue.slice(0, this.selectedValue.length - 1)]
           }
+          this.updateValue(value)
+        }
+      },
+
+      /**
+       * Determine if an option exists
+       * within this.optionList array.
+       *
+       * @param  {Object || String} option
+       * @return {boolean}
+       */
+      optionExists(option) {
+        return this.optionList.some(opt => {
+          if (typeof opt === 'object' && this.getOptionLabel(opt) === option) {
+            return true
+          } else if (opt === option) {
+            return true
+          }
+          return false
         })
-        return value
+      },
+
+      /**
+       * Ensures that options are always
+       * passed as objects to scoped slots.
+       * @param option
+       * @return {*}
+       */
+      normalizeOptionForSlot (option) {
+        return (typeof option === 'object') ? option : {[this.label]: option};
+      },
+
+      /**
+       * If push-tags is true, push the
+       * given option to `this.pushedTags`.
+       *
+       * @param  {Object || String} option
+       * @return {void}
+       */
+      maybePushTag(option) {
+        if (this.pushTags) {
+          this.pushedTags.push(option)
+        }
       },
 
       /**
@@ -648,16 +715,6 @@
       },
 
       /**
-       * 'Private' function to close the search options
-       * @emits  {search:blur}
-       * @returns {void}
-       */
-      closeSearchOptions(){
-        this.open = false
-        this.$emit('search:blur')
-      },
-
-      /**
        * Open the dropdown on focus.
        * @emits  {search:focus}
        * @return {void}
@@ -665,62 +722,6 @@
       onSearchFocus() {
         this.open = true
         this.$emit('search:focus')
-      },
-
-      /**
-       * Delete the value on Delete keypress when there is no
-       * text in the search input, & there's tags to delete
-       * @return {this.value}
-       */
-      maybeDeleteValue() {
-        if (!this.searchEl.value.length && this.selectedValue && this.clearable) {
-          let value = null;
-          if (this.multiple) {
-            value = [...this.selectedValue.slice(0, this.selectedValue.length - 1)]
-          }
-          this.updateValue(value)
-        }
-      },
-
-      /**
-       * Determine if an option exists
-       * within this.optionList array.
-       *
-       * @param  {Object || String} option
-       * @return {boolean}
-       */
-      optionExists(option) {
-        return this.optionList.some(opt => {
-          if (typeof opt === 'object' && opt[this.label] === option) {
-            return true
-          } else if (opt === option) {
-            return true
-          }
-          return false
-        })
-      },
-
-      /**
-       * Ensures that options are always
-       * passed as objects to scoped slots.
-       * @param option
-       * @return {*}
-       */
-      normalizeOptionForSlot (option) {
-        return (typeof option === 'object') ? option : {[this.label]: option};
-      },
-
-      /**
-       * If push-tags is true, push the
-       * given option to `this.pushedTags`.
-       *
-       * @param  {Object || String} option
-       * @return {void}
-       */
-      maybePushTag(option) {
-        if (this.pushTags) {
-          this.pushedTags.push(option)
-        }
       },
 
       /**
@@ -788,10 +789,23 @@
 
     computed: {
 
+      /**
+       * Determine if the component needs to
+       * track the state of values internally.
+       * @return {boolean}
+       */
+      isTrackingValues () {
+        return typeof this.value === 'undefined' || this.$options.propsData.hasOwnProperty('reduce');
+      },
+
+      /**
+       * The options that are currently selected.
+       * @return {Array}
+       */
       selectedValue () {
         let value = this.value;
 
-        if (typeof this.value === 'undefined') {
+        if (this.isTrackingValues) {
           // Vue select has to manage value internally
           value = this.$data._value;
         }
@@ -803,6 +817,13 @@
         return [];
       },
 
+      /**
+       * The options available to be chosen
+       * from the dropdown, including any
+       * tags that have been pushed.
+       *
+       * @return {Array}
+       */
       optionList () {
         return this.options.concat(this.pushedTags);
       },

@@ -74,19 +74,19 @@ module.exports = {
           title: 'Getting Started',
           collapsable: false,
           children: [
-            ['getting-started/install', 'Installation'],
-            ['getting-started/options', 'Dropdown Options'],
-            ['getting-started/values', 'Selecting Values'],
-            ['getting-started/localization', 'Localization'],
+            ['guide/install', 'Installation'],
+            ['guide/options', 'Dropdown Options'],
+            ['guide/values', 'Selecting Values'],
+            ['guide/localization', 'Localization'],
           ],
         },
         {
           title: 'Digging Deeper',
           collapsable: false,
           children: [
-            ['digging-deeper/templating', 'Templating & Slots'],
-            ['digging-deeper/vuex', 'Vuex'],
-            ['digging-deeper/ajax', 'AJAX'],
+            ['guide/templating', 'Templating & Slots'],
+            ['guide/vuex', 'Vuex'],
+            ['guide/ajax', 'AJAX'],
           ],
         },
         {

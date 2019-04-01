@@ -1,6 +1,3 @@
-### Vue Compatibility
--  `vue 1.x` use `vue-select 1.x`
-
 ## Yarn / NPM
 Install with yarn:
 ```bash
@@ -17,7 +14,6 @@ Then, import and register the component:
 import Vue from 'vue'
 import vSelect from 'vue-select'
 
-// register component
 Vue.component('v-select', vSelect)
 ```
 
@@ -33,18 +29,21 @@ You can also import the scss yourself for complete control of the component styl
 @import "vue-select/src/scss/vue-select.scss";
 ```
 
-## In the Browser / CDN
+## In the Browser
 
-Include `vue` & `vue-select.js` - I recommend using [unpkg.com](https://unpkg.com/#/).
+vue-select ships as an UMD module that is accessible in the browser. When loaded
+in the browser, you can access the component through the `VueSelect.VueSelect` 
+global variable. You'll need to load Vue.js, vue-select JS & vue-select CSS.
 
 ```html
 <!-- include VueJS first -->
 <script src="https://unpkg.com/vue@latest"></script>
 
-<!-- use the latest release -->
+<!-- use the latest vue-select release -->
 <script src="https://unpkg.com/vue-select@latest"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
-<!-- or point to a specific release -->
+
+<!-- or point to a specific vue-select release -->
 <script src="https://unpkg.com/vue-select@2.6.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@2.6.0/dist/vue-select.css">
 ```
@@ -55,3 +54,8 @@ Vue.component('v-select', VueSelect.VueSelect);
 ```
 
 <CodePen url="dJjzeP" />
+
+## Vue Compatibility
+
+If you're on Vue `1.x`, use vue-select `1.x`. The `1.x` branch has not received updates
+since the 2.0 release.  

@@ -84,7 +84,7 @@ module.exports = {
           title: 'Digging Deeper',
           collapsable: false,
           children: [
-            ['guide/templating', 'Templating & Slots'],
+            ['guide/templating', 'Templating'],
             ['guide/vuex', 'Vuex'],
             ['guide/ajax', 'AJAX'],
           ],

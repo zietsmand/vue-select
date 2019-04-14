@@ -2,7 +2,7 @@ const isDeployPreview = process.env.hasOwnProperty('DEPLOY_PREVIEW');
 
 const meta = {
   title: 'Vue Select | VueJS Select2/Chosen Component',
-  description: 'Everything you wish the native <select> element could do, wrapped up into a zero dependency, highly extensible Vue component.',
+  description: 'Everything you wish the HTML <select> element could do, wrapped up into a lightweight, extensible Vue component.',
   url: 'http://sagalbot.github.io/vue-select/',
   icon: '/vue-logo.png',
 };

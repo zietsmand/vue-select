@@ -547,15 +547,24 @@
        * @param  {Event} e
        * @return {void}
        */
-      toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.searchEl || e.target === this.$refs.toggle ||
-            e.target.classList.contains('vs__selected') || e.target === this.$el) {
+      toggleDropdown (e) {
+        const toggleTargets = [
+          this.$el,
+          this.searchEl,
+          this.$refs.toggle.$el,
+          this.$refs.openIndicator.$el,
+          ...Array.from(this.$refs.openIndicator.$el.children),
+        ];
+        
+        const target = e.target;
+
+        if (toggleTargets.includes(target) || target.classList.contains('vs__selected')) {
           if (this.open) {
-            this.searchEl.blur() // dropdown will close on blur
+            this.searchEl.blur(); // dropdown will close on blur
           } else {
             if (!this.disabled) {
-              this.open = true
-              this.searchEl.focus()
+              this.open = true;
+              this.searchEl.focus();
             }
           }
         }

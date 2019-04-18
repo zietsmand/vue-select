@@ -1,7 +1,7 @@
 # ![Current Release](https://img.shields.io/github/release/sagalbot/vue-select.svg?style=flat-square) ![Bundle Size](https://flat.badgen.net/bundlephobia/min/vue-select)  ![Monthly Downloads](https://img.shields.io/npm/dm/vue-select.svg?style=flat-square) ![Code Coverage](https://img.shields.io/coveralls/github/sagalbot/vue-select.svg?style=flat-square) ![Maintainability Score](https://img.shields.io/codeclimate/maintainability/sagalbot/vue-select.svg?style=flat-square) ![MIT License](https://img.shields.io/github/license/sagalbot/vue-select.svg?style=flat-square) 
 
 ![Vue Select - Everything you wish the HTML `<select>` element could do, wrapped up into a lightweight, zero 
-  dependency, extensible Vue component.](https://raw.githubusercontent.com/sagalbot/vue-select/branded-readme/docs/.vuepress/assets/readme-splash.png)
+  dependency, extensible Vue component.](https://raw.githubusercontent.com/sagalbot/vue-select/branded-readme/docs/.vuepress/assets/readme-splash.jpg)
 
 - Tagging
 - Filtering / Searching

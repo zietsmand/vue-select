@@ -3,8 +3,7 @@ const isDeployPreview = process.env.hasOwnProperty('DEPLOY_PREVIEW');
 const meta = {
   title: 'Vue Select | VueJS Select2/Chosen Component',
   description: 'Everything you wish the HTML &#x3C;select&#x3E; element could do, wrapped up into a lightweight, extensible Vue component.',
-  url: 'http://sagalbot.github.io/vue-select/',
-  icon: '/vue-logo.png',
+  url: 'https://vue-select.org',
 };
 
 let head = [
@@ -75,6 +74,10 @@ module.exports = {
         buttonText: 'Refresh',
       },
     },
+    '@vuepress/plugin-register-components': {},
+    '@vuepress/plugin-active-header-links': {},
+    '@vuepress/plugin-search': {},
+    '@vuepress/plugin-nprogress': {},
   },
   themeConfig: {
     repo: 'sagalbot/vue-select',

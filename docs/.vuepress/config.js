@@ -68,11 +68,8 @@ module.exports = {
       ga: isDeployPreview ? '' : 'UA-12818324-8',
     },
     '@vuepress/pwa': {
-      serviceWorker: true,
-      updatePopup: {
-        message: 'New content is available.',
-        buttonText: 'Refresh',
-      },
+      serviceWorker: false,
+      updatePopup: true,
     },
     '@vuepress/plugin-register-components': {},
     '@vuepress/plugin-active-header-links': {},
@@ -101,10 +98,18 @@ module.exports = {
           ],
         },
         {
+          title: 'Templating & Styling',
+          collapsable: false,
+          children: [
+            ['guide/components', 'Child Components'],
+            ['guide/css', 'CSS & Selectors'],
+            ['guide/slots', 'Slots'],
+          ],
+        },
+        {
           title: 'Digging Deeper',
           collapsable: false,
           children: [
-            ['guide/templating', 'Templating'],
             ['guide/vuex', 'Vuex'],
             ['guide/ajax', 'AJAX'],
           ],

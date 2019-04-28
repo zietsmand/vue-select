@@ -11,8 +11,7 @@ export default {
     adProvider: null,
   }),
   mounted () {
-    // this.loadAds();
-    this.loadCarbon();
+    this.loadAds();
   },
   watch: {
     '$route' (to, from) {
@@ -35,7 +34,7 @@ export default {
       }
     },
     loadAds () {
-      this.loadCodeFund();
+      this.loadCarbon();
     },
     createScript ({src, id, async = 'async'}) {
       const script = document.createElement('script');

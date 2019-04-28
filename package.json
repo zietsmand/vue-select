@@ -11,7 +11,7 @@
     "serve:docs": "vuepress dev docs",
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js --progress",
     "build:docs": "vuepress build docs",
-    "build:preview": "cross-env DEPLOY_PREVIEW=true vuepress build --debug docs",
+    "build:preview": "cross-env DEPLOY_PREVIEW=true vuepress build docs",
     "test": "jest"
   },
   "repository": {

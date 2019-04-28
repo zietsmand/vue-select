@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     gaSendEvent ({category, action, label}) {
-      if (typeof ga !== 'undefined') {
+      if (typeof ga === 'function') {
         return ga('send', 'event', category, action, label);
       }
     },

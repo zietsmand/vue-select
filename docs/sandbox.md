@@ -1,6 +1,6 @@
 ---
 sidebar: false
-editLink: false
-layout: Sandbox
+isSandbox: true
 ---
 
+<sandbox />

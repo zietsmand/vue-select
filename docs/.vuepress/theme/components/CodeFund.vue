@@ -58,7 +58,7 @@ export default {
           console.log('Loading Carbon ads.', detail);
           this.carbonFallback();
         } else {
-          this.gaSendEvent({category: 'ad', action: 'rendered', label: 'CodeFund'})
+          // this.gaSendEvent({category: 'ad', action: 'rendered', label: 'CodeFund'})
         }
       });
 

@@ -1,7 +1,7 @@
 <template>
-  <v-select :options="books" label="title">
-    <template #selected-option="{author, title}">
-      <component :is="option" v-bind="{author, title}"/>
+  <v-select :options="books" label="title" multiple>
+    <template #selected-option="{author, title, focus}">
+      <component :is="option" v-bind="{author, title}" @click="focus"/>
     </template>
     <template #option="{author, title}">
       <component :is="option" v-bind="{author, title}"/>

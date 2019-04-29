@@ -557,22 +557,7 @@
        * @return {void}
        */
       toggleDropdown (e) {
-        const target = e.target;
-        const toggleTargets = [
-          this.$el,
-          this.searchEl,
-          this.$refs.toggle.$el,
-        ];
-
-        if (typeof this.$refs.openIndicator !== 'undefined') {
-          toggleTargets.push(
-            this.$refs.openIndicator.$el,
-            // the line below is a bit gross, but required to support IE11 without adding polyfills
-            ...Array.prototype.slice.call(this.$refs.openIndicator.$el.childNodes),
-          );
-        }
-
-        if (toggleTargets.indexOf(target) > -1 || target.classList.contains('vs__selected')) {
+        if (this.toggleTargets.indexOf(e.target) > -1 || e.target.classList.contains('vs__selected')) {
           if (this.open) {
             this.searchEl.blur(); // dropdown will close on blur
           } else {
@@ -686,7 +671,12 @@
        * @return {*}
        */
       normalizeOptionForSlot (option) {
-        return (typeof option === 'object') ? option : {[this.label]: option};
+        const normalized = (typeof option === 'object') ? option : {[this.label]: option};
+        return {
+          ...normalized,
+          focus: this.onSearchFocus,
+          blur: this.onSearchBlur,
+        };
       },
 
       /**
@@ -720,20 +710,20 @@
        * @emits  {search:blur}
        * @return {void}
        */
-      onSearchBlur() {
+      onSearchBlur () {
         if (this.mousedown && !this.searching) {
-          this.mousedown = false
+          this.mousedown = false;
         } else {
           if (this.clearSearchOnBlur) {
-            this.search = ''
+            this.search = '';
           }
-          this.closeSearchOptions()
-          return
+          this.closeSearchOptions();
+          return;
         }
         // Fixed bug where no-options message could not be closed
-        if (this.search.length === 0 && this.options.length === 0){
-          this.closeSearchOptions()
-          return
+        if (this.search.length === 0 && this.options.length === 0) {
+          this.closeSearchOptions();
+          return;
         }
       },
 
@@ -742,9 +732,9 @@
        * @emits  {search:focus}
        * @return {void}
        */
-      onSearchFocus() {
-        this.open = true
-        this.$emit('search:focus')
+      onSearchFocus () {
+        this.open = true;
+        this.$emit('search:focus');
       },
 
       /**
@@ -849,6 +839,24 @@
        */
       optionList () {
         return this.options.concat(this.pushedTags);
+      },
+
+      toggleTargets () {
+        const toggleTargets = [
+          this.$el,
+          this.searchEl,
+          this.$refs.toggle,
+        ];
+
+        if (typeof this.$refs.openIndicator !== 'undefined') {
+          toggleTargets.push(
+            this.$refs.openIndicator.$el,
+            // the line below is a bit gross, but required to support IE11 without adding polyfills
+            ...Array.prototype.slice.call(this.$refs.openIndicator.$el.childNodes),
+          );
+        }
+
+        return toggleTargets;
       },
 
       /**

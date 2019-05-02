@@ -40,7 +40,7 @@
           <component :is="childComponents.Deselect" />
         </button>
 
-        <slot name="open-indicator-icon" v-bind="scope.openIndicator">
+        <slot name="open-indicator" v-bind="scope.openIndicator">
           <component :is="childComponents.OpenIndicator" v-if="!noDrop" v-bind="scope.openIndicator.attributes"/>
         </slot>
 

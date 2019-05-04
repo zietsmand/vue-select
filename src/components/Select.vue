@@ -421,7 +421,12 @@
       searchInputQuerySelector: {
         type: String,
         default: '[type=search]'
-      }
+      },
+
+      position: {
+        type: Function,
+        default: (vm) => {},
+      },
     },
 
     data() {
@@ -454,6 +459,11 @@
       multiple() {
         this.clearSelection()
       },
+
+      open (open) {
+          this.$emit(`dropdown:${open ? 'opening' : 'closing'}`, this);
+          this.$nextTick(() => this.$emit(`dropdown:${open ? 'opened' : 'closed'}`, this));
+      },
     },
 
     created() {
@@ -467,7 +477,8 @@
         }
       }
 
-      this.$on('option:created', this.maybePushTag)
+      this.$on('option:created', this.maybePushTag);
+      this.$on('dropdown:opened', this.position);
     },
 
     methods: {

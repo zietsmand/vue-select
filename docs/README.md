@@ -36,3 +36,6 @@ If you want to get a quick sense of what vue-select can do, check out
 - **[CodePen Template](http://codepen.io/sagalbot/pen/NpwrQO)**
 - **[GitHub](https://github.com/sagalbot/vue-select)**
 - **[Projects](https://github.com/sagalbot/vue-select/projects)**
+
+
+<Popper />

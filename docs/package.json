@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vuepress dev",
     "build": "vuepress build",
-    "build:preview": "cross-env DEPLOY_PREVIEW=true vuepress build --debug docs"
+    "build:preview": "cross-env DEPLOY_PREVIEW=true vuepress build"
   },
   "devDependencies": {
     "@vuepress/plugin-active-header-links": "^1.0.0-alpha.47",

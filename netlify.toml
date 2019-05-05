@@ -3,7 +3,7 @@
 # @see https://www.netlify.com/docs/netlify-toml-reference/
 [build]
   base = "docs"
-  publish = ".vuepress/dist"
+  publish = "docs/.vuepress/dist"
   command = "yarn build"
 
 # Deploy Preview context

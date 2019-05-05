@@ -5,6 +5,7 @@
   "author": "Jeff Sagal <sagalbot@gmail.com>",
   "private": false,
   "main": "dist/vue-select.js",
+  "types": "./index.d.ts",
   "files": [
     "dist",
     "src"

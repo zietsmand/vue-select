@@ -1,0 +1,23 @@
+{
+  "name": "@vue-select/docs",
+  "version": "1.0",
+  "license": "MIT",
+  "scripts": {
+    "serve:docs": "vuepress dev docs",
+    "build:docs": "vuepress build docs",
+    "build:preview": "cross-env DEPLOY_PREVIEW=true vuepress build --debug docs"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-active-header-links": "^1.0.0-alpha.47",
+    "@vuepress/plugin-google-analytics": "^1.0.0-alpha.47",
+    "@vuepress/plugin-nprogress": "^1.0.0-alpha.47",
+    "@vuepress/plugin-pwa": "^1.0.0-alpha.47",
+    "@vuepress/plugin-register-components": "^1.0.0-alpha.47",
+    "@vuepress/plugin-search": "^1.0.0-alpha.47",
+    "fuse.js": "^3.2.0",
+    "gh-pages": "^0.11.0",
+    "vue": "^2.6.10",
+    "vuepress": "^1.0.0-alpha.47",
+    "vuex": "^3.1.0"
+  }
+}

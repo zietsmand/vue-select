@@ -16,7 +16,7 @@ into the SCSS, the files are located in `src/scss`. The variables listed below c
 All variables are implemented with `!default` in order to make them easier to override in your
 application.
 
-<<< @/src/scss/global/_variables.scss
+<<< @/../src/scss/global/_variables.scss
 
 ## Overriding Default Styles
 
@@ -32,6 +32,6 @@ all instances of Vue Select, or add your own classname if you just want to affec
 
 <CssSpecificity />  
 
-<<< @/docs/.vuepress/components/CssSpecificity.vue
+<<< @/.vuepress/components/CssSpecificity.vue
 
 

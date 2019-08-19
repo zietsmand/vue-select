@@ -68,6 +68,9 @@
         <li v-if="!filteredOptions.length" class="vs__no-options" @mousedown.stop="">
           <slot name="no-options">Sorry, no matching options.</slot>
         </li>
+        <li v-if="$slots['appended-item']">
+          <slot name="appended-item"></slot>
+        </li>
       </ul>
     </transition>
   </div>
